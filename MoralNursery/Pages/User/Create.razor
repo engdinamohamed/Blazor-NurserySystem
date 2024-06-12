@@ -1,0 +1,173 @@
+﻿@page "/user/create"
+@inject IUserService UserService
+@inject IClassRoomService ClassRoomService
+@inject NavigationManager NavigationManager
+@inject ProtectedSessionStorage ProtectedSessionStore
+﻿@using System.ComponentModel.DataAnnotations
+
+<style>
+    .row {
+        margin-top: 10px !important;
+    }
+</style>
+
+
+<Card Style="width:100%;margin-bottom:50px;">
+    <CardHeader Color="CardColor.Light">
+        <div class="row">
+            <div class="col-lg-9">
+                <h2>New User</h2>
+            </div>
+            <div class="col-lg-3 text-right">                
+                <a style="border:none;background-color:transparent;" href="/user" role="button">
+                    <Icon Name="IconName.TextIndentRight" Size="IconSize.x2" Color="IconColor.Primary" />
+                </a>
+
+            </div>
+        </div>
+        
+    </CardHeader>
+    <CardBody>
+        <EditForm Model="@userObj" OnValidSubmit="CreateUser">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="fullname" class="control-label"> Full Name</label>
+                        <input name="fullname" class="form-control" @bind="@userObj.FullName" required />
+                        <ValidationMessage For="@(() => userObj.FullName)" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="username" class="control-label"> UserName</label>
+                        <input name="username" class="form-control" @bind="@userObj.Username" required />
+                        <ValidationMessage For="@(() => userObj.Username)" />
+                        @if (notValidUsername)
+                        {
+                            <Alert Color="AlertColor.Danger" Dismissable="false">
+                                <Icon Name="IconName.ExclamationTriangleFill" class="me-2">
+
+                                </Icon>"The username is already exist."
+                            </Alert>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="username" class="control-label"> Password</label>
+                        <input name="username" type="password" class="form-control" @bind="@userObj.PasswordHash" required />
+                        <ValidationMessage For="@(() => userObj.PasswordHash)" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="confirm" class="control-label">Confirm Password</label>
+                        <input name="confirm" type="password" class="form-control" @bind="@confirmPassword" required />
+                        <ValidationMessage For="@(() => userObj.Username)" />
+                        @if (notValidPassword)
+                        {
+                            <Alert Color="AlertColor.Danger" Dismissable="false">
+                                <Icon Name="IconName.ExclamationTriangleFill" class="me-2">
+
+                                </Icon>"The passwords don't match'."
+                            </Alert>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="fullname" class="control-label"> Phone Number</label>
+                        <input name="fullname" class="form-control" @bind="@userObj.PhoneNumber" />
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="fullname" class="control-label"> Address</label>
+                        <input name="fullname" class="form-control" @bind="@userObj.Address" />
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="fullname" class="control-label"> Email </label>
+                        <input name="fullname" class="form-control" @bind="@userObj.Email" />
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="IsActive" class="control-label"> Active</label>
+                        <input type="checkbox" name="IsActive" @bind="@userObj.IsActive" />
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row" style="margin-top:50px;margin-bottom:50px;">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Save" />
+                        <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+                    </div>
+                </div>
+            </div>
+
+        </EditForm>
+    </CardBody>
+</Card>
+
+
+
+
+@code {
+    User userObj = new User();
+
+    string confirmPassword = "";
+    bool notValidUsername, notValidPassword;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+
+    }
+    protected async Task CreateUser()
+    {
+        notValidUsername = false;
+        notValidPassword = false;
+        User existingUser = await Task.Run(() => UserService.GetUserByUsername(userObj.Username));
+        if (existingUser != null)
+        {
+            notValidUsername = true;
+          // return;
+
+        }
+        if (userObj.PasswordHash != confirmPassword) { notValidPassword = true; }
+        if (!notValidPassword && !notValidUsername)
+        {
+            await UserService.CreateUser(userObj);
+            NavigationManager.NavigateTo("user");
+        }
+
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("user");
+    }
+}

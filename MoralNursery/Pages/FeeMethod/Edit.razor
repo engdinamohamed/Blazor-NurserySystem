@@ -1,0 +1,71 @@
+﻿@page "/feemethod/edit/{id:int}"
+@inject IFeeMethodService FeeMethodService
+@inject NavigationManager NavigationManager
+
+<Card Style="width:100%;margin-bottom:50px;">
+    <CardHeader Color="CardColor.Light">
+        <div class="row">
+            <div class="col-lg-9">
+            <h2>Edit Subscription Method</h2>
+            </div>
+            <div class="col-lg-3 text-right">
+            <a style="border:none;background-color:transparent;" href="/feemethod" role="button">
+                    <Icon Name="IconName.TextIndentRight" Size="IconSize.x2" Color="IconColor.Primary" />
+                </a>
+
+            </div>
+        </div>
+        
+    </CardHeader>
+    <CardBody>
+        <EditForm Model="@feeMethodObj" OnValidSubmit="EditFeeMethod">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="Classroom" class="control-label"> Subscription Method</label>
+                        <input for="Classroom" class="form-control" @bind="@feeMethodObj.FeeMethodName" required />
+                        <ValidationMessage For="@(() => feeMethodObj.FeeMethodName)" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="Classroom" class="control-label"> Amount</label>
+                        <input for="Classroom" class="form-control" @bind="@feeMethodObj.FeeQ" required />
+                        <ValidationMessage For="@(() => feeMethodObj.FeeQ)" />
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top:20px;">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Update" />
+                        <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+    </CardBody>
+</Card>
+
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    FeeMethod feeMethodObj = new FeeMethod();
+    protected override async Task OnInitializedAsync()
+    {
+        feeMethodObj = await Task.Run(() => FeeMethodService.GetFeeMethodById(Convert.ToInt32(id)));
+    }
+    protected async Task EditFeeMethod()
+    {
+        await FeeMethodService.UpdateFeeMethod(feeMethodObj);
+        NavigationManager.NavigateTo("feemethod");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("feemethod");
+    }
+}

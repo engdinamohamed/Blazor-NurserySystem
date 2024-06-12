@@ -1,0 +1,113 @@
+﻿@page "/payment/detail/{paymentId:int}"
+@inject IPaymentService PaymentService;
+@inject NavigationManager NavigationManager
+
+@if (paymentObj != null)
+{
+
+     <Card Style="width:100%;margin-bottom:50px;">
+    <CardHeader Color="CardColor.Light">
+        <div class="row">
+            <div class="col-lg-9">
+                <h2>Payment Details</h2>
+            </div>
+            <div class="col-lg-3 text-right">                
+                    <a style="border:none;background-color:transparent;" href="/payment" role="button">
+                    <Icon Name="IconName.TextIndentRight" Size="IconSize.x2" Color="IconColor.Primary" />
+                </a>
+
+            </div>
+        </div>
+        
+    </CardHeader>
+    <CardBody>
+            @if (paymentObj != null)
+            {
+                <table class="table table-striped">
+                    <thead>
+                        <tr class="table-primary" style="text-align:center;"><th colspan="2">Info</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row" style="width:30%">Student Code</th>
+                            <td>@paymentObj?.Register?.Student?.StudentCode</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width:30%">Student Name</th>
+                            <td>@paymentObj?.Register?.Student?.StudentName</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width:30%">Classroom</th>
+                            <td>@paymentObj?.Register?.Student?.ClassRoom?.ClassName</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width:30%">Register Type </th>
+                            <td>@paymentObj?.Register?.FeeMethod?.FeeMethodName</td>
+                        </tr>
+                       
+                        <tr>
+                            <th scope="row" style="width:30%">Discount </th>
+                            <td>@paymentObj?.Register?.Discount</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width:30%">Total Fee After Discount </th>
+                            <td>@totalFeeAmount</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width:30%">Start Date</th>
+                            <td>@paymentObj?.Register?.StartDate.ToShortDateString()</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width:30%">End Date</th>
+                            <td>@paymentObj?.Register?.EndDate.ToShortDateString()</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width:30%">Payment Method </th>
+                            <td>@paymentObj?.PaymentMethod?.PaymentMethodName</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width:30%">Payment</th>
+                            <td>@paymentObj?.Amount</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width:30%">Register Date</th>
+                            <td>@paymentObj?.AddedIn.ToShortDateString()</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width:30%">Employee</th>
+                            <td>@paymentObj?.User?.Username</td>
+                        </tr>
+
+
+
+                    </tbody>
+                </table>
+
+            }
+
+        </CardBody>
+ </Card>
+
+
+
+   
+   
+}
+
+@code {
+    [Parameter]
+    public int paymentId { get; set; }
+    Payment paymentObj = new Payment();
+
+    List<Student> studentList = new List<Student>();
+    float totalFeeAmount;
+    protected override async Task OnInitializedAsync()
+    {
+        paymentObj = await Task.Run(() => PaymentService.GetPaymentById(Convert.ToInt32(paymentId)));
+        totalFeeAmount = paymentObj.Register.SubscriptionFee + paymentObj.Register.CostumesFee +
+       paymentObj.Register.BusFee + paymentObj.Register.BooksFee + paymentObj.Register.RegistrationFee;
+       // studentList = await Task.Run(() => StudentService.GetStudenstByClassroomId(classRoomObj.Id));
+
+    }
+
+}

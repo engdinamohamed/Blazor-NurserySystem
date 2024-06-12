@@ -1,0 +1,186 @@
+﻿@page "/user"
+@page "/user/list"
+
+@inject IJSRuntime JSRuntime
+@inject ProtectedSessionStorage ProtectedSessionStore
+@inject NavigationManager NavigationManager
+@inject IUserService UserService
+@inject IRoleService RoleService
+
+<ConfirmDialog @ref="dialog" />
+<Toasts class="p-3" Messages="messages" AutoHide="true" Delay="2000"  Placement="ToastsPlacement.TopRight" />
+
+<Card Style="width:100%;margin-bottom:50px;">
+    <CardHeader Color="CardColor.Light">
+        <h2>Users</h2>
+        <button style="border:none;background-color:transparent;" @onclick="NavigateToCreate" disabled="@checkRole("add-user")"><Icon Name="IconName.PlusCircleFill" Size="IconSize.x2" Color="IconColor.Success" /></button>
+    </CardHeader>
+    <CardBody>
+        <div>
+            @if (userList is null)
+            {
+                <p><em>Nothing yet.........................!</em></p>
+            }
+            else
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Full Name</th>
+                            <th>Username</th>
+                            <th>Phone Number</th>
+                            <th>Role</th>
+                            <th>Active</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in userList)
+                        {
+                            string detailLink = $"/user/detail/{user.Id}";
+                            string editlLink = $"/user/edit/{user.Id}";
+                            string userRoleLink = $"/user/role/{user.Id}";
+                            string changePassLink = $"/user/pass/{user.Id}";
+                            <tr>
+                                <td>@user?.FullName</td>
+                                <td>@user?.Username</td>
+                                <td>@user?.PhoneNumber</td>
+                                <td>
+                                    @if (user.Roles != null && user.Roles.Any())
+                                    {
+                                        @string.Join(", ", user.Roles.Select(role => role.RoleName))
+                                    }
+                                </td>
+                                <td>@(user?.IsActive == true ? "Yes" : "No")</td>
+                                <td class="text-right">
+                                    <Dropdown>
+                                        <DropdownToggleButton Color="ButtonColor.Secondary">
+                                            <Icon Name="IconName.GearFill" Class="menuIcons"></Icon>
+                                        </DropdownToggleButton>
+                                        <DropdownMenu>
+                                            <DropdownItem To="@detailLink" Type="ButtonType.Link">Details</DropdownItem>
+
+                                            <DropdownItem To="@editlLink" Type="ButtonType.Link" Disabled="@checkRole("edit-user")">Edit</DropdownItem>
+                                        @if (!user.Username.ToLower().Equals("admin"))
+                                        {
+                                            <DropdownItem To="@userRoleLink" Type="ButtonType.Link" Disabled="@checkRole("add-user-role")">User Roles</DropdownItem>
+                                        }
+                                            @* <DropdownItem To="@changePassLink" Type="ButtonType.Link" Disabled="@checkRole("change-user-password")">Change Password</DropdownItem> *@
+                                            <DropdownItem Type="ButtonType.Button" Disabled="@checkRole("reset-user-password")" @onclick="@(e => ResetUserPassword(user))">Reset Password</DropdownItem>
+                                            @if (!user.Username.ToLower().Equals("admin"))
+                                            {
+                                                <DropdownItem Type="ButtonType.Button" Disabled="@checkRole("delete-user")" @onclick="@(e => DeleteUser(user))">Delete</DropdownItem>
+                                            }
+
+
+                                        </DropdownMenu>
+                                    </Dropdown>
+
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+
+        </div>
+    </CardBody>
+</Card>
+
+
+@code {
+    private ConfirmDialog dialog = default!;
+    public User user_sesstion = new User();
+    List<User> userList = new List<User>();
+
+    List<ToastMessage> messages = new List<ToastMessage>();    
+    private void ShowMessage(ToastType toastType, string title, string msg) => messages.Add(CreateToastMessage(toastType, title, msg));
+
+    private ToastMessage CreateToastMessage(ToastType toastType,string title,string msg)
+    => new ToastMessage
+        {
+            Type = toastType,
+            Title = title,            
+            Message = msg,
+        };
+
+    protected override async Task OnInitializedAsync()
+    {
+        int userId = 0;
+        userList = await Task.Run(() => UserService.GetAllUsers());
+        var result_UserId = await ProtectedSessionStore.GetAsync<int>("UserId");
+        if (result_UserId.Success)
+        {
+            userId = result_UserId.Value;
+        }
+        if (userId > 0)
+        {
+            user_sesstion = await Task.Run(() => UserService.GetUserById(userId));
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+    }
+
+    bool checkRole(string roleName)
+    {
+        if (user_sesstion?.Roles?.Any(role => role.Functions.Any(rf => rf.FunctionName == roleName)) ?? false)
+            return false;
+        return true;
+    }
+
+    async Task DeleteUser(User user)
+    {
+        var confirmation = await dialog.ShowAsync(
+            title: $"Are you sure you want to delete ({user.Username})?",
+            message1: "This will delete the User. Once deleted can not be rolled back.",
+            message2: "Do you want to proceed?");
+
+        if (confirmation)
+        {
+            try
+            {
+                if (user != null)
+                {
+                    bool success = await UserService.DeleteUser(user);
+                    if (success)
+                    {
+                        ShowMessage(ToastType.Success, "delete succeeded", "The user has been deleted successfully.");
+                        userList.RemoveAll(x => x.Id == user.Id);
+                    }
+
+                    else { ShowMessage(ToastType.Danger, "Deleting Error", "Unable to delete the user as he is associated with other entries."); }
+                }
+
+            }
+            catch
+            {
+                ShowMessage(ToastType.Danger, "Deleting Error", "Unable to delete the user as he is associated with other entries.");
+            }
+
+        }
+
+
+
+
+    }
+
+    async Task ResetUserPassword(User user)
+    {
+        user.PasswordHash = "123456";
+        await UserService.UpdateUser(user);
+        ShowMessage(ToastType.Success, "Reset Message", $"The password of user {user.Username} has changed to 123456 ");
+    }
+    void NavigateToCreate()
+    {
+        if (!checkRole("add-user"))
+        {
+            NavigationManager.NavigateTo("/user/create");
+        }
+    }
+
+
+}

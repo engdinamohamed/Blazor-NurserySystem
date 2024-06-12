@@ -1,0 +1,333 @@
+﻿@page "/register/edit/{registerId:int}"
+@inject IRegisterService RegisterService
+@inject IPaymentService PaymentService
+@inject IFeeMethodService FeeMethodService
+@inject IStudentService StudentService
+@inject NavigationManager NavigationManager
+@inject ProtectedSessionStorage ProtectedSessionStore
+@using System.ComponentModel.DataAnnotations
+
+<style>
+    .row {
+        margin-top: 10px !important;
+    }
+
+    .card {
+        padding: 10px;
+    }
+</style>
+
+<Card Style="width:100%;margin-bottom:50px;">
+    <CardHeader Color="CardColor.Light">
+        <div class="row">
+            <div class="col-lg-9">
+                <h2>Edit register record</h2>
+            </div>
+            <div class="col-lg-3 text-right">                
+                <a style="border:none;background-color:transparent;" href="/register" role="button">
+                    <Icon Name="IconName.TextIndentRight" Size="IconSize.x2" Color="IconColor.Primary" />
+                </a>
+
+            </div>
+        </div>
+        
+    </CardHeader>
+    <CardBody>
+        <EditForm Model="@registerObj" OnValidSubmit="EditRegister">
+            <div class="card">
+                <div class="card-header">
+                    @if (studentObj != null)
+                    {
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label for="StudentCode" class="control-label"> Student Code: </label>
+                                    <label name="StudentCode" class="control-label"> @studentObj.StudentCode </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label for="StudentName" class="control-label"> Student Name: </label>
+                                    <label name="StudentName" class="control-label"> @studentObj.StudentName </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label for="StudentName" class="control-label"> Classroom Name: </label>
+                                    <label name="StudentName" class="control-label"> @studentObj.ClassRoom.ClassName </label>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="Classroom" class="control-label"> Fee Method</label>
+                                <InputSelect class="form-control"
+                                             TValue="int"
+                                             ValueChanged="onFeeMethodChange"
+                                             ValueExpression="@(() => registerObj.FeeMethodId)"
+                                             Value="registerObj.FeeMethodId">
+                                    @if (feeMethodList != null)
+                                    {
+                                        @foreach (var feeMethod in feeMethodList)
+                                        {
+                                            <option value="@feeMethod.Id">@feeMethod.FeeMethodName</option>
+                                        }
+                                    }
+                                </InputSelect>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="Fee" class="control-label"> Fees</label>
+                                <input name="Fee" class="form-control" @bind="selectedFeeQ" readonly required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="Discount" class="control-label" style="color:red;"> Discount</label>
+                                <input name="Discount" class="form-control" value="@registerObj.Discount" @onchange="OnChangeDiscount" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="Feerequired" class="control-label" style="color:forestgreen;">Fee After Discount </label>
+                                <input name="Feerequired" class="form-control" @bind="@registerObj.SubscriptionFee" readonly required />
+                                @if (notValidFeeAnount)
+                                {
+                                    @* <p class="text-danger">Payment amount must be between 0 and the remaining fee.</p> *@
+                                    <Alert Color="AlertColor.Danger" Dismissable="false">
+                                        <Icon Name="IconName.ExclamationTriangleFill" class="me-2">
+
+                                        </Icon>"The new fee amount cannot be less than the total payments amount already paid."
+                                    </Alert>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="Fee" class="control-label"> Registration Fee</label>
+                                <input name="Fee" class="form-control" value="@registerObj.RegistrationFee" @onchange="@(e => calculateTotalFees(e, "RegistrationFee"))" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="Fee" class="control-label">Bus Fees</label>
+                                <input name="Fee" class="form-control" value="@registerObj.BusFee" @onchange="@(e => calculateTotalFees(e, "BusFee"))" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="Fee" class="control-label">Books Fees</label>
+                                <input name="Fee" class="form-control" value="@registerObj.BooksFee" @onchange="@(e => calculateTotalFees(e, "BooksFee"))" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="Fee" class="control-label">Costumes Fees</label>
+                                <input name="Fee" class="form-control" value="@registerObj.CostumesFee" @onchange="@(e => calculateTotalFees(e, "CostumesFee"))" required />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="Feerequired" class="control-label" style="color:forestgreen;">Total Fee required </label>
+                                <input name="Feerequired" class="form-control" @bind="totalFeesAmount" readonly required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="StartDate" class="control-label"> Start Date </label>
+                                <InputDate name="StartDate" class="form-control" @bind-Value="registerObj.StartDate" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="EndDate" class="control-label"> End Date </label>
+                                <InputDate name="EndDate" class="form-control" @bind-Value="registerObj.EndDate" @bind-Value:format="dd-MM-yyyy" required />
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row" style="margin-top:20px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="submit" class="btn btn-primary" value="Save" />
+                                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </EditForm>
+    </CardBody>
+</Card>
+
+
+
+
+
+@code {
+    [Parameter]
+    public int registerId { get; set; }
+
+    Register registerObj = new Register();
+    Student studentObj;
+    int userId = 0;
+
+    List<FeeMethod> feeMethodList = new List<FeeMethod>();
+    List<Payment> paymentList = new List<Payment>();
+    float selectedFeeQ = 0, totalFeesAmount = 0;
+    bool notValidFeeAnount;
+    protected override async Task OnInitializedAsync()
+    {
+        feeMethodList = await Task.Run(() => FeeMethodService.GetFeeMethods());
+        registerObj = await Task.Run(() => RegisterService.GetRegisterById(registerId));
+        studentObj = await Task.Run(() => StudentService.GetStudentById(registerObj.StudentId));
+        var feeMethod = registerObj.FeeMethod;
+        if (feeMethod != null)
+        {
+            registerObj.FeeMethodId = feeMethod.Id;
+            selectedFeeQ = feeMethod.FeeQ;
+            registerObj.SubscriptionFee = selectedFeeQ;
+            totalFeesAmount = registerObj.SubscriptionFee + registerObj.RegistrationFee + registerObj.BusFee +
+            registerObj.BooksFee + registerObj.CostumesFee - registerObj.Discount;
+
+        }
+        registerObj.StartDate = DateTime.Today;
+        registerObj.EndDate = DateTime.Today.AddMonths(1);
+
+    }
+
+    private async Task onFeeMethodChange(int id)
+    {
+        // selectedFeeMethodId = id;
+        registerObj.FeeMethodId = id;
+        var feeMethod = feeMethodList.FirstOrDefault(f => f.Id == id);
+        if (feeMethod != null)
+        {
+            selectedFeeQ = feeMethod.FeeQ;
+            registerObj.SubscriptionFee = (float)(selectedFeeQ);
+            totalFeesAmount = registerObj.SubscriptionFee + registerObj.RegistrationFee + registerObj.BusFee + 
+            registerObj.BooksFee + registerObj.CostumesFee - registerObj.Discount;
+        }
+
+    }
+
+    private async Task OnChangeDiscount(ChangeEventArgs args)
+    {
+        registerObj.Discount = 0;
+        if (args.Value != null && !string.IsNullOrWhiteSpace(args.Value.ToString()))
+        {
+            if (float.TryParse(args.Value.ToString(), out float discount))
+            {
+                registerObj.Discount = float.Parse(args.Value.ToString());
+            }
+        }
+
+        registerObj.SubscriptionFee = (float)(selectedFeeQ );
+        totalFeesAmount = registerObj.SubscriptionFee + registerObj.RegistrationFee +
+        registerObj.BusFee + registerObj.BooksFee + registerObj.CostumesFee - registerObj.Discount;
+
+    }
+
+    protected async Task EditRegister()
+    {
+        notValidFeeAnount = false;
+
+        // Fetch existing payments for this register
+        paymentList = await PaymentService.GetPaymentByRegisterId(registerId);
+
+        var totalPaid = paymentList.Sum(payment => payment.Amount);
+
+        // Calculate the new fee amount after applying the discount
+        var newFeeAmount = registerObj.SubscriptionFee + registerObj.CostumesFee +
+        registerObj.BusFee + registerObj.BooksFee + registerObj.RegistrationFee - registerObj.Discount;
+
+        // Check if the new fee amount is less than the total paid amount
+        if (newFeeAmount < totalPaid)
+        {
+            // Show an error message or handle the error as needed
+            notValidFeeAnount = true;
+            return;
+        }
+
+        await RegisterService.UpdateRegister(registerObj);
+        NavigationManager.NavigateTo("register");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("register");
+    }
+    public async Task calculateTotalFees(ChangeEventArgs args, string feeType)
+    {
+
+        if (args.Value == null || !float.TryParse(args.Value.ToString(), out float input))
+        {
+            input = 0;
+        }
+
+        if (input < 0)
+        {
+            input = 0;
+        }
+
+        switch (feeType)
+        {
+            case "RegistrationFee":
+                registerObj.RegistrationFee = input;
+                break;
+            case "BusFees":
+                registerObj.BusFee = input;
+                break;
+            case "BooksFee":
+                registerObj.BooksFee = input;
+                break;
+            case "CostumesFee":
+                registerObj.CostumesFee = input;
+                break;
+        }
+
+        // Calculate the total fees
+        totalFeesAmount = registerObj.SubscriptionFee + registerObj.RegistrationFee + registerObj.BusFee + registerObj.BooksFee 
+        + registerObj.CostumesFee - registerObj.Discount;
+
+        // Trigger UI update
+        StateHasChanged();
+    }
+
+
+}
+

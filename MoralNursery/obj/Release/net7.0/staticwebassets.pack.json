@@ -1,0 +1,545 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\obj\\Release\\net7.0\\scopedcss\\projectbundle\\MoralNursery.bundle.scp.css",
+      "PackagePath": "staticwebassets\\MoralNursery.bundle.scp.css"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\css\\print.css",
+      "PackagePath": "staticwebassets\\css\\print.css"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\css\\site.css",
+      "PackagePath": "staticwebassets\\css\\site.css"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\favicon.png",
+      "PackagePath": "staticwebassets\\favicon.png"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\images\\bg-02.jpg",
+      "PackagePath": "staticwebassets\\images\\bg-02.jpg"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\images\\logo-print.png",
+      "PackagePath": "staticwebassets\\images\\logo-print.png"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\images\\logo.PNG",
+      "PackagePath": "staticwebassets\\images\\logo.PNG"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\js\\bootstrap.js",
+      "PackagePath": "staticwebassets\\js\\bootstrap.js"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\js\\bootstrap.min.js",
+      "PackagePath": "staticwebassets\\js\\bootstrap.min.js"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\css\\loginStyle.css",
+      "PackagePath": "staticwebassets\\login\\css\\loginStyle.css"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\css\\main.css",
+      "PackagePath": "staticwebassets\\login\\css\\main.css"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\css\\util.css",
+      "PackagePath": "staticwebassets\\login\\css\\util.css"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\Linearicons-Free-v1.0.0\\WebFont\\Linearicons-Free.eot",
+      "PackagePath": "staticwebassets\\login\\fonts\\Linearicons-Free-v1.0.0\\WebFont\\Linearicons-Free.eot"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\Linearicons-Free-v1.0.0\\WebFont\\Linearicons-Free.svg",
+      "PackagePath": "staticwebassets\\login\\fonts\\Linearicons-Free-v1.0.0\\WebFont\\Linearicons-Free.svg"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\Linearicons-Free-v1.0.0\\WebFont\\Linearicons-Free.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\Linearicons-Free-v1.0.0\\WebFont\\Linearicons-Free.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\Linearicons-Free-v1.0.0\\WebFont\\Linearicons-Free.woff",
+      "PackagePath": "staticwebassets\\login\\fonts\\Linearicons-Free-v1.0.0\\WebFont\\Linearicons-Free.woff"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\Linearicons-Free-v1.0.0\\WebFont\\Linearicons-Free.woff2",
+      "PackagePath": "staticwebassets\\login\\fonts\\Linearicons-Free-v1.0.0\\WebFont\\Linearicons-Free.woff2"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\Linearicons-Free-v1.0.0\\icon-font.min.css",
+      "PackagePath": "staticwebassets\\login\\fonts\\Linearicons-Free-v1.0.0\\icon-font.min.css"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\HELP-US-OUT.txt",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\HELP-US-OUT.txt"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\css\\font-awesome.css",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\css\\font-awesome.css"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\css\\font-awesome.min.css",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\css\\font-awesome.min.css"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\fonts\\FontAwesome.otf",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\fonts\\FontAwesome.otf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\fonts\\fontawesome-webfont.eot",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\fonts\\fontawesome-webfont.eot"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\fonts\\fontawesome-webfont.svg",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\fonts\\fontawesome-webfont.svg"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\fonts\\fontawesome-webfont.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\fonts\\fontawesome-webfont.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\fonts\\fontawesome-webfont.woff",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\fonts\\fontawesome-webfont.woff"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\fonts\\fontawesome-webfont.woff2",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\fonts\\fontawesome-webfont.woff2"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\less\\animated.less",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\less\\animated.less"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\less\\bordered-pulled.less",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\less\\bordered-pulled.less"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\less\\core.less",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\less\\core.less"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\less\\fixed-width.less",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\less\\fixed-width.less"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\less\\font-awesome.less",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\less\\font-awesome.less"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\less\\icons.less",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\less\\icons.less"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\less\\larger.less",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\less\\larger.less"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\less\\list.less",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\less\\list.less"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\less\\mixins.less",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\less\\mixins.less"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\less\\path.less",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\less\\path.less"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\less\\rotated-flipped.less",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\less\\rotated-flipped.less"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\less\\screen-reader.less",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\less\\screen-reader.less"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\less\\stacked.less",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\less\\stacked.less"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\less\\variables.less",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\less\\variables.less"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\scss\\_animated.scss",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\scss\\_animated.scss"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\scss\\_bordered-pulled.scss",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\scss\\_bordered-pulled.scss"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\scss\\_core.scss",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\scss\\_core.scss"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\scss\\_fixed-width.scss",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\scss\\_fixed-width.scss"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\scss\\_icons.scss",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\scss\\_icons.scss"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\scss\\_larger.scss",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\scss\\_larger.scss"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\scss\\_list.scss",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\scss\\_list.scss"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\scss\\_mixins.scss",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\scss\\_mixins.scss"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\scss\\_path.scss",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\scss\\_path.scss"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\scss\\_rotated-flipped.scss",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\scss\\_rotated-flipped.scss"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\scss\\_screen-reader.scss",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\scss\\_screen-reader.scss"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\scss\\_stacked.scss",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\scss\\_stacked.scss"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\scss\\_variables.scss",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\scss\\_variables.scss"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\font-awesome-4.7.0\\scss\\font-awesome.scss",
+      "PackagePath": "staticwebassets\\login\\fonts\\font-awesome-4.7.0\\scss\\font-awesome.scss"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\montserrat\\Montserrat-Black.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\montserrat\\Montserrat-Black.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\montserrat\\Montserrat-BlackItalic.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\montserrat\\Montserrat-BlackItalic.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\montserrat\\Montserrat-Bold.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\montserrat\\Montserrat-Bold.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\montserrat\\Montserrat-BoldItalic.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\montserrat\\Montserrat-BoldItalic.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\montserrat\\Montserrat-ExtraBold.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\montserrat\\Montserrat-ExtraBold.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\montserrat\\Montserrat-ExtraBoldItalic.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\montserrat\\Montserrat-ExtraBoldItalic.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\montserrat\\Montserrat-ExtraLight.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\montserrat\\Montserrat-ExtraLight.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\montserrat\\Montserrat-ExtraLightItalic.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\montserrat\\Montserrat-ExtraLightItalic.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\montserrat\\Montserrat-Italic.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\montserrat\\Montserrat-Italic.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\montserrat\\Montserrat-Light.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\montserrat\\Montserrat-Light.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\montserrat\\Montserrat-LightItalic.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\montserrat\\Montserrat-LightItalic.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\montserrat\\Montserrat-Medium.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\montserrat\\Montserrat-Medium.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\montserrat\\Montserrat-MediumItalic.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\montserrat\\Montserrat-MediumItalic.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\montserrat\\Montserrat-Regular.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\montserrat\\Montserrat-Regular.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\montserrat\\Montserrat-SemiBold.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\montserrat\\Montserrat-SemiBold.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\montserrat\\Montserrat-SemiBoldItalic.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\montserrat\\Montserrat-SemiBoldItalic.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\montserrat\\Montserrat-Thin.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\montserrat\\Montserrat-Thin.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\montserrat\\Montserrat-ThinItalic.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\montserrat\\Montserrat-ThinItalic.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\montserrat\\OFL.txt",
+      "PackagePath": "staticwebassets\\login\\fonts\\montserrat\\OFL.txt"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\poppins\\Poppins-Black.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\poppins\\Poppins-Black.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\poppins\\Poppins-BlackItalic.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\poppins\\Poppins-BlackItalic.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\poppins\\Poppins-Bold.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\poppins\\Poppins-Bold.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\poppins\\Poppins-BoldItalic.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\poppins\\Poppins-BoldItalic.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\poppins\\Poppins-ExtraBold.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\poppins\\Poppins-ExtraBold.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\poppins\\Poppins-ExtraBoldItalic.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\poppins\\Poppins-ExtraBoldItalic.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\poppins\\Poppins-ExtraLight.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\poppins\\Poppins-ExtraLight.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\poppins\\Poppins-ExtraLightItalic.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\poppins\\Poppins-ExtraLightItalic.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\poppins\\Poppins-Italic.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\poppins\\Poppins-Italic.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\poppins\\Poppins-Light.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\poppins\\Poppins-Light.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\poppins\\Poppins-LightItalic.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\poppins\\Poppins-LightItalic.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\poppins\\Poppins-Medium.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\poppins\\Poppins-Medium.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\poppins\\Poppins-MediumItalic.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\poppins\\Poppins-MediumItalic.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\poppins\\Poppins-Regular.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\poppins\\Poppins-Regular.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\poppins\\Poppins-SemiBold.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\poppins\\Poppins-SemiBold.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\poppins\\Poppins-SemiBoldItalic.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\poppins\\Poppins-SemiBoldItalic.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\poppins\\Poppins-Thin.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\poppins\\Poppins-Thin.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\fonts\\poppins\\Poppins-ThinItalic.ttf",
+      "PackagePath": "staticwebassets\\login\\fonts\\poppins\\Poppins-ThinItalic.ttf"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\images\\bg-01.jpg",
+      "PackagePath": "staticwebassets\\login\\images\\bg-01.jpg"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\images\\icons\\favicon.ico",
+      "PackagePath": "staticwebassets\\login\\images\\icons\\favicon.ico"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\js\\main.js",
+      "PackagePath": "staticwebassets\\login\\js\\main.js"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\animate\\animate.css",
+      "PackagePath": "staticwebassets\\login\\vendor\\animate\\animate.css"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\animsition\\css\\animsition.css",
+      "PackagePath": "staticwebassets\\login\\vendor\\animsition\\css\\animsition.css"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\animsition\\css\\animsition.min.css",
+      "PackagePath": "staticwebassets\\login\\vendor\\animsition\\css\\animsition.min.css"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\animsition\\js\\animsition.js",
+      "PackagePath": "staticwebassets\\login\\vendor\\animsition\\js\\animsition.js"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\animsition\\js\\animsition.min.js",
+      "PackagePath": "staticwebassets\\login\\vendor\\animsition\\js\\animsition.min.js"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\bootstrap\\css\\bootstrap-grid.css",
+      "PackagePath": "staticwebassets\\login\\vendor\\bootstrap\\css\\bootstrap-grid.css"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\bootstrap\\css\\bootstrap-grid.css.map",
+      "PackagePath": "staticwebassets\\login\\vendor\\bootstrap\\css\\bootstrap-grid.css.map"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\bootstrap\\css\\bootstrap-grid.min.css",
+      "PackagePath": "staticwebassets\\login\\vendor\\bootstrap\\css\\bootstrap-grid.min.css"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\bootstrap\\css\\bootstrap-grid.min.css.map",
+      "PackagePath": "staticwebassets\\login\\vendor\\bootstrap\\css\\bootstrap-grid.min.css.map"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\bootstrap\\css\\bootstrap-reboot.css",
+      "PackagePath": "staticwebassets\\login\\vendor\\bootstrap\\css\\bootstrap-reboot.css"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\bootstrap\\css\\bootstrap-reboot.css.map",
+      "PackagePath": "staticwebassets\\login\\vendor\\bootstrap\\css\\bootstrap-reboot.css.map"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\bootstrap\\css\\bootstrap-reboot.min.css",
+      "PackagePath": "staticwebassets\\login\\vendor\\bootstrap\\css\\bootstrap-reboot.min.css"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\bootstrap\\css\\bootstrap-reboot.min.css.map",
+      "PackagePath": "staticwebassets\\login\\vendor\\bootstrap\\css\\bootstrap-reboot.min.css.map"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\bootstrap\\css\\bootstrap.css",
+      "PackagePath": "staticwebassets\\login\\vendor\\bootstrap\\css\\bootstrap.css"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\bootstrap\\css\\bootstrap.css.map",
+      "PackagePath": "staticwebassets\\login\\vendor\\bootstrap\\css\\bootstrap.css.map"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\bootstrap\\css\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\login\\vendor\\bootstrap\\css\\bootstrap.min.css"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\bootstrap\\css\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\login\\vendor\\bootstrap\\css\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\bootstrap\\js\\bootstrap.js",
+      "PackagePath": "staticwebassets\\login\\vendor\\bootstrap\\js\\bootstrap.js"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\bootstrap\\js\\bootstrap.min.js",
+      "PackagePath": "staticwebassets\\login\\vendor\\bootstrap\\js\\bootstrap.min.js"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\bootstrap\\js\\popper.js",
+      "PackagePath": "staticwebassets\\login\\vendor\\bootstrap\\js\\popper.js"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\bootstrap\\js\\popper.min.js",
+      "PackagePath": "staticwebassets\\login\\vendor\\bootstrap\\js\\popper.min.js"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\bootstrap\\js\\tooltip.js",
+      "PackagePath": "staticwebassets\\login\\vendor\\bootstrap\\js\\tooltip.js"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\countdowntime\\countdowntime.js",
+      "PackagePath": "staticwebassets\\login\\vendor\\countdowntime\\countdowntime.js"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\css-hamburgers\\hamburgers.css",
+      "PackagePath": "staticwebassets\\login\\vendor\\css-hamburgers\\hamburgers.css"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\css-hamburgers\\hamburgers.min.css",
+      "PackagePath": "staticwebassets\\login\\vendor\\css-hamburgers\\hamburgers.min.css"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\daterangepicker\\daterangepicker.css",
+      "PackagePath": "staticwebassets\\login\\vendor\\daterangepicker\\daterangepicker.css"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\daterangepicker\\daterangepicker.js",
+      "PackagePath": "staticwebassets\\login\\vendor\\daterangepicker\\daterangepicker.js"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\daterangepicker\\moment.js",
+      "PackagePath": "staticwebassets\\login\\vendor\\daterangepicker\\moment.js"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\daterangepicker\\moment.min.js",
+      "PackagePath": "staticwebassets\\login\\vendor\\daterangepicker\\moment.min.js"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\jquery\\jquery-3.2.1.min.js",
+      "PackagePath": "staticwebassets\\login\\vendor\\jquery\\jquery-3.2.1.min.js"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\perfect-scrollbar\\perfect-scrollbar.css",
+      "PackagePath": "staticwebassets\\login\\vendor\\perfect-scrollbar\\perfect-scrollbar.css"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\perfect-scrollbar\\perfect-scrollbar.min.js",
+      "PackagePath": "staticwebassets\\login\\vendor\\perfect-scrollbar\\perfect-scrollbar.min.js"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\select2\\select2.css",
+      "PackagePath": "staticwebassets\\login\\vendor\\select2\\select2.css"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\select2\\select2.js",
+      "PackagePath": "staticwebassets\\login\\vendor\\select2\\select2.js"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\select2\\select2.min.css",
+      "PackagePath": "staticwebassets\\login\\vendor\\select2\\select2.min.css"
+    },
+    {
+      "Id": "D:\\Dina\\mywork\\moral-nursery-website\\MoralNursery\\MoralNursery\\wwwroot\\login\\vendor\\select2\\select2.min.js",
+      "PackagePath": "staticwebassets\\login\\vendor\\select2\\select2.min.js"
+    },
+    {
+      "Id": "obj\\Release\\net7.0\\staticwebassets\\msbuild.MoralNursery.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Release\\net7.0\\staticwebassets\\msbuild.build.MoralNursery.props",
+      "PackagePath": "build\\MoralNursery.props"
+    },
+    {
+      "Id": "obj\\Release\\net7.0\\staticwebassets\\msbuild.buildMultiTargeting.MoralNursery.props",
+      "PackagePath": "buildMultiTargeting\\MoralNursery.props"
+    },
+    {
+      "Id": "obj\\Release\\net7.0\\staticwebassets\\msbuild.buildTransitive.MoralNursery.props",
+      "PackagePath": "buildTransitive\\MoralNursery.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

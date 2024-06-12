@@ -1,0 +1,169 @@
+﻿@page "/role/edit/{roleId:int}"
+@inject IRoleService RoleService
+@inject IFunctionService FunctionService
+@inject NavigationManager NavigationManager
+<style>
+    .row {
+        margin-top: 10px !important;
+    }
+</style>
+
+<Card Style="width:100%;margin-bottom:50px;">
+    <CardHeader Color="CardColor.Light">
+        <div class="row">
+            <div class="col-lg-9">
+                <h2>Edit Role</h2>
+            </div>
+            <div class="col-lg-3 text-right">                
+                <a style="border:none;background-color:transparent;" href="/role" role="button">
+                    <Icon Name="IconName.TextIndentRight" Size="IconSize.x2" Color="IconColor.Primary" />
+                </a>
+
+            </div>
+        </div>
+        
+    </CardHeader>
+    <CardBody>
+        <EditForm Model="@roleObj" OnValidSubmit="EditRole">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="Classroom" class="control-label"> Role Name</label>
+                        <input for="Classroom" class="form-control" @bind="@roleObj.RoleName" required />
+                        <ValidationMessage For="@(() => roleObj.RoleName)" />
+                        @if (notValidRoleName)
+                        {
+                            <Alert Color="AlertColor.Danger" Dismissable="false">
+                                <Icon Name="IconName.ExclamationTriangleFill" class="me-2">
+
+                                </Icon>"The role name is already exist."
+                            </Alert>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="Classroom" class="control-label"> Functions</label>
+
+                        @if (functionList != null)
+                        {
+                            @foreach (var function in functionList)
+                            {
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="@function.Id" @bind="@function.IsSelected" />
+                                    <label class="form-check-label" for="@function.Id">
+                                        @function.FunctionDescription
+                                    </label>
+                                </div>
+                            }
+                        }
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top:50px;margin-bottom:50px;">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Save" />
+                        <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+    </CardBody>
+</Card>
+
+
+
+
+@code {
+    [Parameter]
+    public int roleId { get; set; }
+
+    Role roleObj = new Role();
+    bool notValidRoleName;
+    List<FunctionViewModel> functionList = new List<FunctionViewModel>();
+    private List<int> selectedFunctionIds = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var functions = await Task.Run(() => FunctionService.GetFunctions());
+        functionList = functions.Select(f => new FunctionViewModel
+            {
+                Id = f.Id,
+                FunctionName = f.FunctionName,
+                FunctionDescription = f.FunctionDescription,
+                IsSelected = false
+            }).ToList();
+        roleObj = await Task.Run(() => RoleService.GetRoleById(Convert.ToInt32(roleId)));
+        //add roleObj.Function to selectedFunctionIds and check the checkbox
+        if (roleObj.Functions != null)
+        {
+            selectedFunctionIds = roleObj.Functions.Select(f => f.Id).ToList();
+            foreach (var function in functionList)
+            {
+                function.IsSelected = selectedFunctionIds.Contains(function.Id);
+            }
+        }
+
+    }
+    // private void ToggleFunctionSelection(int functionId, object isChecked)
+    // {
+    //     if ((bool)isChecked)
+    //     {
+    //         selectedFunctionIds.Add(functionId);
+    //     }
+    //     else
+    //     {
+    //         selectedFunctionIds.Remove(functionId);
+    //     }
+    // }
+    protected async Task EditRole()
+    {
+        Role existingRole = await Task.Run(() => RoleService.GetRoleByName(roleObj.RoleName));
+        if (existingRole != null && existingRole.Id != roleId)
+        {
+            notValidRoleName = true;
+            return;
+
+        }
+
+        // roleObj.Functions = functionList.Where(f => selectedFunctionIds.Contains(f.Id))
+        //                                .Select(f => new Function { Id = f.Id, FunctionName=f.FunctionName, FunctionDescription = f.FunctionDescription })
+        //                                .ToList();
+
+        // Clear the existing functions list
+        roleObj.Functions.Clear();
+
+        // Add selected functions to the role's functions list
+        foreach (var function in functionList)
+        {
+            if (function.IsSelected)
+            {
+                roleObj.Functions.Add(new Function
+                    {
+                        Id = function.Id,
+                        FunctionName = function.FunctionName,
+                        FunctionDescription = function.FunctionDescription
+                    });
+            }
+        }
+        await RoleService.UpdateRole(roleObj);
+        NavigationManager.NavigateTo("role");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("role");
+    }
+
+    private class FunctionViewModel
+    {
+        public int Id { get; set; }
+        public string FunctionName { get; set; }
+        public string FunctionDescription { get; set; }
+        public bool IsSelected { get; set; }
+    }
+}

@@ -1,0 +1,132 @@
+﻿@page "/user/pass/{id:int}"
+@inject IUserService UserService
+@inject IClassRoomService ClassRoomService
+@inject NavigationManager NavigationManager
+@inject ProtectedSessionStorage ProtectedSessionStore
+﻿@using System.ComponentModel.DataAnnotations
+
+<style>
+    .row {
+        margin-top: 10px !important;
+    }
+</style>
+
+<Card Style="width:100%;margin-bottom:50px;">
+    <CardHeader Color="CardColor.Light">
+        <div class="row">
+            <div class="col-lg-9">
+                <h2>Change Password</h2>
+            </div>
+            <div class="col-lg-3 text-right">                
+                <a style="border:none;background-color:transparent;" href="/user" role="button">
+                    <Icon Name="IconName.TextIndentRight" Size="IconSize.x2" Color="IconColor.Primary" />
+                </a>
+
+            </div>
+        </div>
+        
+    </CardHeader>
+    <CardBody>
+        <EditForm Model="@userObj" OnValidSubmit="EditUser">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="username" class="control-label"> UserName</label>
+                        <input name="username" class="form-control" @bind="@userObj.Username" required disabled />
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="fullname" class="control-label"> Current Password</label>
+                        <input name="fullname" type="password" class="form-control" @bind="@confirmOldPassword" />
+                        @if (notValidOldPassword)
+                        {
+                            <Alert Color="AlertColor.Danger" Dismissable="false">
+                                <Icon Name="IconName.ExclamationTriangleFill" class="me-2">
+
+                                </Icon>"The current passwords is wrong'."
+                            </Alert>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="username" class="control-label">New Password</label>
+                        <input name="username" type="password" class="form-control" @bind="@userObj.PasswordHash" required />
+                        <ValidationMessage For="@(() => userObj.PasswordHash)" />
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="confirm" class="control-label">Confirm New Password</label>
+                        <input name="confirm" type="password" class="form-control" @bind="@confirmPassword" required />
+                        @if (notValidPassword)
+                        {
+                            <Alert Color="AlertColor.Danger" Dismissable="false">
+                                <Icon Name="IconName.ExclamationTriangleFill" class="me-2">
+
+                                </Icon>"The passwords don't match'."
+                            </Alert>
+                        }
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row" style="margin-top:50px;margin-bottom:50px;">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Save" />
+                        <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+                    </div>
+                </div>
+            </div>
+
+        </EditForm>
+    </CardBody>
+</Card>
+
+
+
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    bool notValidPassword , notValidOldPassword;
+    string confirmPassword = "", oldPassword = "", confirmOldPassword;
+
+    User userObj = new User();
+
+    protected override async Task OnInitializedAsync()
+    {
+        userObj = await Task.Run(() => UserService.GetUserById(Convert.ToInt32(id)));
+        oldPassword = userObj.PasswordHash;
+
+    }
+    protected async void EditUser()
+    {
+        notValidOldPassword = false;
+        notValidPassword = false;
+        if (oldPassword != confirmOldPassword) { notValidOldPassword = true; return; }
+        if (userObj.PasswordHash != confirmPassword) { notValidPassword = true; return; }
+        await UserService.UpdateUser(userObj);
+        NavigationManager.NavigateTo("user");
+
+
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("user");
+    }
+}

@@ -1,0 +1,207 @@
+is_global = true
+build_property.TargetFramework = net7.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = MoralNursery
+build_property.RootNamespace = MoralNursery
+build_property.ProjectDir = D:\Dina\mywork\moral-nursery-website\MoralNursery\MoralNursery\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 7.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = D:\Dina\mywork\moral-nursery-website\MoralNursery\MoralNursery
+build_property._RazorSourceGeneratorDebug = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/App.razor]
+build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/ClassRoom/Create.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2xhc3NSb29tXENyZWF0ZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/ClassRoom/Details.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2xhc3NSb29tXERldGFpbHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/ClassRoom/Edit.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2xhc3NSb29tXEVkaXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/Components/ConfirmComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29tcG9uZW50c1xDb25maXJtQ29tcG9uZW50LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/Contact/Info.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29udGFjdFxJbmZvLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/FeeMethod/Create.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRmVlTWV0aG9kXENyZWF0ZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/FeeMethod/Edit.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRmVlTWV0aG9kXEVkaXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/FeeMethod/List.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRmVlTWV0aG9kXExpc3QucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/Home/Index.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZVxJbmRleC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/Login.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW4ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/PaymentMethod/Create.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGF5bWVudE1ldGhvZFxDcmVhdGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/PaymentMethod/Edit.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGF5bWVudE1ldGhvZFxFZGl0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/PaymentMethod/List.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGF5bWVudE1ldGhvZFxMaXN0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/Payment/Create.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGF5bWVudFxDcmVhdGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/Payment/Detail.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGF5bWVudFxEZXRhaWwucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/Payment/Edit.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGF5bWVudFxFZGl0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/Payment/List.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGF5bWVudFxMaXN0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/Payment/Print.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGF5bWVudFxQcmludC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/Register/Create.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVnaXN0ZXJcQ3JlYXRlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/Register/Detail.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVnaXN0ZXJcRGV0YWlsLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/Register/Edit.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVnaXN0ZXJcRWRpdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/Register/List.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVnaXN0ZXJcTGlzdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/Role/Create.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUm9sZVxDcmVhdGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/Role/Detail.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUm9sZVxEZXRhaWwucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/Role/Edit.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUm9sZVxFZGl0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/Role/List.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUm9sZVxMaXN0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/Student/Create.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3R1ZGVudFxDcmVhdGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/Student/Details.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3R1ZGVudFxEZXRhaWxzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/Student/Edit.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3R1ZGVudFxFZGl0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/Student/List.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3R1ZGVudFxMaXN0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/Test.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGVzdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/User/Create.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlclxDcmVhdGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/User/Detail.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlclxEZXRhaWwucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/User/Edit.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlclxFZGl0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/User/List.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlclxMaXN0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/User/Pass.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlclxQYXNzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/User/Role.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlclxSb2xlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Shared/LoginLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXExvZ2luTGF5b3V0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Shared/SurveyPrompt.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFN1cnZleVByb21wdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/ClassRoom/List.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2xhc3NSb29tXExpc3QucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-fddhgjigiy
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Shared/EmptyLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEVtcHR5TGF5b3V0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-n23ncnyzil
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Shared/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-dz7mnlzoqg
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Shared/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE5hdk1lbnUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-a642kf01ol
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Dina/mywork/moral-nursery-website/MoralNursery/MoralNursery/Pages/_Host.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX0hvc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 

@@ -1,0 +1,260 @@
+﻿@page "/register"
+@page "/register/{studentId:int}"
+@page "/register/list"
+@page "/register/list/{studentId:int}"
+
+@inject IRegisterService RegisterService
+@inject IJSRuntime JSRuntime
+@inject ProtectedSessionStorage ProtectedSessionStore
+@inject NavigationManager NavigationManager
+@inject IUserService UserService
+
+<ConfirmDialog @ref="dialog" />
+<Toasts class="p-3" Messages="messages" AutoHide="true" Delay="2000" Placement="ToastsPlacement.TopRight" />
+
+<Card Style="width:100%;margin-bottom:50px;">
+    <CardHeader Color="CardColor.Light">
+        <h2>Registers</h2>       
+    </CardHeader>
+    <CardBody>
+        <Grid @ref="grid" TItem="RegisterDto"
+              Class="table table-hover table-bordered table-striped"
+              DataProvider="RegisterDataProvider"
+              AllowFiltering="true"
+              AllowPaging="true"
+              PageSize="20"
+              AllowSorting="true"
+              AllowSelection="false"
+              Responsive="true" style="font-size:14px;">
+
+
+            <GridColumn FilterTextboxWidth="80" TItem="RegisterDto" HeaderText="Code" PropertyName="StudentCode" SortKeySelector="item => item.StudentCode">
+                @context.StudentCode
+            </GridColumn>
+            <GridColumn FilterTextboxWidth="150" TItem="RegisterDto" HeaderText="Student Name" PropertyName="StudentName" SortKeySelector="item => item.StudentName">
+                @context.StudentName
+            </GridColumn>
+            <GridColumn FilterTextboxWidth="100" TItem="RegisterDto" HeaderText="Classroom" PropertyName="ClassName" SortKeySelector="item => item.ClassName">
+                @context.ClassName
+            </GridColumn>
+            <GridColumn FilterTextboxWidth="100" TItem="RegisterDto" HeaderText="Subscription" PropertyName="FeeMethodName" SortKeySelector="item => item.FeeMethodName">
+                @context.FeeMethodName
+            </GridColumn>
+            <GridColumn FilterTextboxWidth="100" TItem="RegisterDto" HeaderText="Total Fees After Discount" PropertyName="TotalFees" SortKeySelector="item => item.TotalFees">
+                @context.TotalFees
+            </GridColumn>
+            <GridColumn FilterTextboxWidth="100" TItem="RegisterDto" HeaderText="Start Date" PropertyName="StartDate" SortKeySelector="item => item.StartDate">
+                @context.StartDate.ToString("dd/MM/yyyy")
+            </GridColumn>
+            <GridColumn FilterTextboxWidth="100" TItem="RegisterDto" HeaderText="End Date" PropertyName="EndDate" SortKeySelector="item => item.EndDate">
+                @context.EndDate.ToString("dd/MM/yyyy")
+            </GridColumn>
+            <GridColumn FilterTextboxWidth="100" TItem="RegisterDto" HeaderText="Register Date" PropertyName="AddedIn" SortKeySelector="item => item.AddedIn">
+                @context.AddedIn.ToString("dd/MM/yyyy")
+            </GridColumn>
+            <GridColumn FilterTextboxWidth="100" TItem="RegisterDto" HeaderText="Employee Name" PropertyName="FullName" SortKeySelector="item => item.FullName">
+                @context.FullName
+            </GridColumn>
+            <GridColumn TItem="RegisterDto" Filterable="false" Sortable="false">
+                <Dropdown>
+                    <DropdownToggleButton Color="ButtonColor.Secondary">
+                        <Icon Name="IconName.GearFill" Class="menuIcons"></Icon>
+                    </DropdownToggleButton>
+                    <DropdownMenu>
+                        <DropdownItem Type="ButtonType.Button" @onclick="@(e => NavigateToDetail(context.Id))">Details</DropdownItem>
+                        <DropdownItem Type="ButtonType.Button" Disabled="@checkRole("edit-register")" @onclick="@(e => NavigateToEdit(context.Id))">Edit</DropdownItem>
+                        <DropdownItem Type="ButtonType.Button" Disabled="@checkRole("delete-register")" @onclick="@(e => DeleteRegister(context.Id))">Delete</DropdownItem>
+                        <DropdownItem Type="ButtonType.Button" Disabled="@checkRole("add-payment")" @onclick="@(e => NavigateToAddPayment(context.Id))">Add Payment</DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
+            </GridColumn>
+
+        </Grid>
+    </CardBody>
+    <CardFooter>
+        <button class="btn btn-primary" @onclick="ExportToExcel">Export to Excel</button>
+    </CardFooter>
+</Card>
+
+
+
+
+@code {
+    [Parameter]
+    public int studentId { get; set; }
+
+    private bool isDataFetched = false;
+    private IEnumerable<RegisterDto> registers = default!;
+    private IEnumerable<RegisterDto> filteredRegisters = default!;
+    List<Register> registerList = new List<Register>();
+    public User user_sesstion = new User();
+    private ConfirmDialog dialog = default!;
+    List<ToastMessage> messages = new List<ToastMessage>();
+    
+    Grid<RegisterDto> grid;
+
+    // private void ShowMessage(ToastType toastType, string title, string msg) => messages.Add(CreateToastMessage(toastType, title, msg));
+    private void ShowMessage(ToastType toastType, string title, string msg)
+    {
+        messages.Add(CreateToastMessage(toastType, title, msg));
+        StateHasChanged();
+    }
+
+    bool checkRole(string roleName)
+    {
+        if (user_sesstion?.Roles?.Any(role => role.Functions.Any(rf => rf.FunctionName == roleName)) ?? false)
+            return false;
+        return true;
+    }
+
+    private ToastMessage CreateToastMessage(ToastType toastType, string title, string msg)
+    => new ToastMessage
+        {
+            Type = toastType,
+            Title = title,
+            Message = msg,
+        };
+   async Task DeleteRegister(int registerId)
+    {
+        Register register = await RegisterService.GetRegisterById(registerId);
+        bool success = false;
+        if (register != null)
+        {
+            var confirmation = await dialog.ShowAsync(
+          title: $"Are you sure you want to delete ({register.FeeMethod.FeeMethodName}) register?",
+          message1: "This will delete the register. Once deleted can not be rolled back.",
+          message2: "Do you want to proceed?");
+            try
+            {
+                if (confirmation)
+                {
+                    if (register != null)
+                    {
+                        success = await RegisterService.DeleteRegister(register);                      
+
+                        if (success)
+                        {
+                            ShowMessage(ToastType.Success, "delete succeeded", "The register has been deleted successfully.");
+                            registerList.RemoveAll(x => x.Id == register.Id);
+                            await FetchRegisterData();
+                            await grid.RefreshDataAsync();
+                            StateHasChanged();
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                ShowMessage(ToastType.Danger, "Deleting Error", "Unable to delete the register as it is associated with other entries.");
+
+            }
+        }
+      
+
+    }
+
+    void NavigateToEdit(int registerId)
+    {
+        NavigationManager.NavigateTo($"/register/edit/{registerId}");
+    }
+    void NavigateToDetail(int registerId)
+    {
+        NavigationManager.NavigateTo($"/register/detail/{registerId}");
+    }
+    void NavigateToAddPayment(int registerId)
+    {
+        NavigationManager.NavigateTo($"/payment/create/{registerId}");
+    }
+
+    private async Task<GridDataProviderResult<RegisterDto>> RegisterDataProvider(GridDataProviderRequest<RegisterDto> request)
+    {
+        if (!isDataFetched)
+        {
+            await FetchRegisterData();
+        }
+
+        var result = request.ApplyTo(registers);
+        filteredRegisters= result.Data; // Store the filtered data
+        return result;
+
+
+    }
+    private async Task FetchRegisterData()
+    {
+        int userId = 0;
+        var result_UserId = await ProtectedSessionStore.GetAsync<int>("UserId");
+        if (result_UserId.Success)
+        {
+            userId = result_UserId.Value;
+        }
+
+        if (userId > 0)
+        {
+            user_sesstion = await Task.Run(() => UserService.GetUserById(userId));
+            registerList = await RegisterService.GetRegisters();
+            // registers = registerList.AsEnumerable(); 
+            // List<RegisterDto> RegisterDtoList = new List< RegisterDto >();
+            registers = registerList.Select(register => new RegisterDto
+                {
+                    Id = register.Id,
+                    StudentCode = register.Student?.StudentCode,
+                    StudentName = register.Student?.StudentName,
+                    ClassName = register.Student?.ClassRoom?.ClassName,
+                    FeeMethodName = register.FeeMethod?.FeeMethodName,
+                    StartDate = DateOnly.FromDateTime(register.StartDate),
+                    EndDate = DateOnly.FromDateTime(register.EndDate),
+                    AddedIn = register.AddedIn,
+                    FullName = register.User?.FullName,
+                    TotalFees = (register.SubscriptionFee + register.CostumesFee + register.BooksFee + register.BusFee + register.RegistrationFee - register.Discount),
+                }).ToList();
+            // registers = RegisterDtoList.AsEnumerable();
+            isDataFetched = true;
+            StateHasChanged(); // Trigger a re-render
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+
+    }
+    private async Task ExportToExcel()
+    {
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+        using var package = new ExcelPackage();
+        var worksheet = package.Workbook.Worksheets.Add("Registers");
+
+        // Add headers
+        worksheet.Cells[1, 1].Value = "Student Code";
+        worksheet.Cells[1, 2].Value = "Student Name";
+        worksheet.Cells[1, 3].Value = "Classroom";
+        worksheet.Cells[1, 4].Value = "Subscription";
+        worksheet.Cells[1, 5].Value = "Start Date";
+        worksheet.Cells[1, 6].Value = "End Date";
+        worksheet.Cells[1, 7].Value = "Register Date";
+        worksheet.Cells[1, 8].Value = "Employee Name";
+
+        // Add filtered data
+        int row = 2;
+        foreach (var register in filteredRegisters)
+        {
+            worksheet.Cells[row, 1].Value = register.StudentCode;
+            worksheet.Cells[row, 2].Value = register.StudentName;
+            worksheet.Cells[row, 3].Value = register.ClassName;
+            worksheet.Cells[row, 4].Value = register.FeeMethodName;
+            worksheet.Cells[row, 5].Value = register.StartDate;
+            worksheet.Cells[row, 6].Value = register.EndDate;
+            worksheet.Cells[row, 7].Value = register.AddedIn.ToString();
+            worksheet.Cells[row, 8].Value = register.FullName;
+            row++;
+        }
+
+        // Convert the package to a byte array
+        var fileBytes = package.GetAsByteArray();
+
+        // Trigger the download in the browser
+        var fileName = $"Registers_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+        await JSRuntime.InvokeVoidAsync("saveAsFile", fileName, Convert.ToBase64String(fileBytes));
+    }
+
+
+}

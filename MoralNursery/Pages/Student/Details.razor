@@ -1,0 +1,86 @@
+﻿@page "/student/detail/{id:int}"
+@inject IStudentService StudentService
+@inject NavigationManager NavigationManager
+
+@if (studentObj != null)
+{
+    <Card Style="width:100%;margin-bottom:50px;">
+    <CardHeader Color="CardColor.Light">
+        <div class="row">
+            <div class="col-lg-9">
+                    <h2>@studentObj.StudentName</h2>
+            </div>
+            <div class="col-lg-3 text-right">                
+                <a style="border:none;background-color:transparent;" href="/student" role="button">
+                    <Icon Name="IconName.TextIndentRight" Size="IconSize.x2" Color="IconColor.Primary" /></a>
+
+            </div>
+        </div>
+        
+    </CardHeader>
+    <CardBody>
+            <table class="table" style="margin-top:40px;">
+                <tbody>
+                    <tr>
+                        <th scope="row" style="width:30%">Student Code</th>
+                        <td>@studentObj.StudentCode</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" style="width:30%">Classroom</th>
+                        <td>@studentObj.ClassRoom?.ClassName</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Enrolled</th>
+                        <td>@(studentObj.IsActive ? "Yes" : "No")</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"> Guardian Name(1)</th>
+                        <td>@studentObj.GuardianPrimaryName</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Guardian Tel(1)</th>
+                        <td>@studentObj.GuardianPrimaryTel</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Guardian Addres(1)</th>
+                        <td>@studentObj.GuardianPrimaryAddress</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"> Guardian Name(2)</th>
+                        <td>@studentObj.GuardianSecName</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Guardian Tel(2)</th>
+                        <td>@studentObj.GuardianSecTel</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Guardian Addres(2)</th>
+                        <td>@studentObj.GuardianSecAddress</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Allergies</th>
+                        <td>@studentObj.Allergies</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Medeical Conditions</th>
+                        <td>@studentObj.MdeicalConditions</td>
+                    </tr>
+                </tbody>
+            </table>
+    </CardBody>
+</Card>
+
+    
+   
+}
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+    Student studentObj = new Student();
+    protected override async Task OnInitializedAsync()
+    {        
+        studentObj = await Task.Run(() => StudentService.GetStudentById(Convert.ToInt32(id)));
+    }
+   
+}

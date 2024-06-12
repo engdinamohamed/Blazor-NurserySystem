@@ -1,0 +1,77 @@
+﻿@page "/classroom/detail/{classroomId:int}"
+@inject IClassRoomService ClassRoomService;
+@inject IStudentService StudentService;
+@inject NavigationManager NavigationManager
+
+@if (classRoomObj != null)
+{
+    <Card Style="width:100%;margin-bottom:50px;">
+    <CardHeader Color="CardColor.Light">
+        <div class="row">
+            <div class="col-lg-9">
+                    <h2>@classRoomObj.ClassName</h2>
+            </div>
+            <div class="col-lg-3 text-right">                
+                <a style="border:none;background-color:transparent;" href="/classroom" role="button" >
+                    <Icon Name="IconName.TextIndentRight" Size="IconSize.x2" Color="IconColor.Primary"/></a>
+
+            </div>
+        </div>
+        
+    </CardHeader>
+    <CardBody>
+            <table class="table table-striped">
+                <thead>
+                <tr class="table-primary" style="text-align:center;"><th colspan="2">Student Name</th></tr>    
+                </thead>
+                <tbody>
+                    @if (studentList != null)
+                            {
+                                @foreach (var student in studentList)
+                                {
+
+                                <tr>
+                       
+                                    <td>
+                            
+                                     <span style="display:block;">@student.StudentCode</span>
+
+                             
+
+                                    </td>
+                                <td>
+
+                                    <span style="display:block;">@student.StudentName</span>
+
+
+
+                                </td>
+
+                    </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+    </CardBody>
+</Card>
+
+
+
+   
+}
+
+@code {
+    [Parameter]
+    public int classroomId { get; set; }
+    ClassRoom classRoomObj = new ClassRoom();
+    List<Student> studentList = new List<Student>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        classRoomObj = await Task.Run(() => ClassRoomService.GetClassRoomById(Convert.ToInt32(classroomId)));
+        studentList = await Task.Run(() => StudentService.GetStudenstByClassroomId(classRoomObj.Id));
+
+    }
+
+}

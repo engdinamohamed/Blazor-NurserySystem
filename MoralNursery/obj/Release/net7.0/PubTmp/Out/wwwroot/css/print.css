@@ -1,0 +1,56 @@
+﻿body {
+    margin-top: 10px;
+    background: #eee;
+}
+
+@media print {
+    body {
+        background: #fff;
+        margin: 0;
+        padding: 0;        
+    }
+
+    .container {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .row.invoice {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .col-md-10 {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .panel {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .table {
+        width: 100%;
+    }
+
+    .d-print-none {
+        display: none;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+}

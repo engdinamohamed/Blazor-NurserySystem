@@ -1,0 +1,142 @@
+﻿@page "/user/edit/{id:int}"
+@inject IUserService UserService
+@inject IClassRoomService ClassRoomService
+@inject NavigationManager NavigationManager
+@inject ProtectedSessionStorage ProtectedSessionStore
+﻿@using System.ComponentModel.DataAnnotations
+
+<style>
+    .row {
+        margin-top: 10px !important;
+    }
+</style>
+
+
+<Card Style="width:100%;margin-bottom:50px;">
+    <CardHeader Color="CardColor.Light">
+        <div class="row">
+            <div class="col-lg-9">
+                <h2>Edit User</h2>
+            </div>
+            <div class="col-lg-3 text-right">                
+                <a style="border:none;background-color:transparent;" href="/user" role="button">
+                    <Icon Name="IconName.TextIndentRight" Size="IconSize.x2" Color="IconColor.Primary" />
+                </a>
+
+            </div>
+        </div>
+        
+    </CardHeader>
+    <CardBody>
+        <EditForm Model="@userObj" OnValidSubmit="EditUser">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="username" class="control-label"> UserName</label>
+                        <input name="username" class="form-control" @bind="@userObj.Username" required disabled />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="fullname" class="control-label"> Full Name</label>
+                        <input name="fullname" class="form-control" @bind="@userObj.FullName" required />
+                        <ValidationMessage For="@(() => userObj.FullName)" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="fullname" class="control-label"> Phone Number</label>
+                        <input name="fullname" class="form-control" @bind="@userObj.PhoneNumber" />
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="fullname" class="control-label"> Address</label>
+                        <input name="fullname" class="form-control" @bind="@userObj.Address" />
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="fullname" class="control-label"> Email </label>
+                        <input name="fullname" class="form-control" @bind="@userObj.Email" />
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="IsActive" class="control-label"> Active</label>
+                        @if (userObj != null && userObj.Username!=null)
+                        {
+                            if (userObj.Username.ToLower().Equals("admin"))
+                            {
+                                <input type="checkbox" name="IsActive" value="@userObj.IsActive" checked disabled />
+                            }
+
+                            else
+                            {
+                                <input type="checkbox" name="IsActive" @bind="@userObj.IsActive" />
+                            }
+                        }
+                        
+
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row" style="margin-top:50px;margin-bottom:50px;">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Save" />
+                        <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+                    </div>
+                </div>
+            </div>
+
+        </EditForm>
+    </CardBody>
+</Card>
+
+
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+   
+
+    User userObj = new User();    
+
+    protected override async Task OnInitializedAsync()
+    {
+        userObj = await Task.Run(() => UserService.GetUserById(Convert.ToInt32(id)));
+
+    }
+    protected async void EditUser()
+    {
+       
+        await UserService.UpdateUser(userObj);
+        NavigationManager.NavigateTo("user");
+        
+
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("user");
+    }
+}

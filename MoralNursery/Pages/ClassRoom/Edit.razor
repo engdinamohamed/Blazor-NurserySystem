@@ -1,0 +1,65 @@
+﻿@page "/classroom/edit/{id:int}"
+@inject IClassRoomService ClassRoomService
+@inject NavigationManager NavigationManager
+
+
+
+<Card Style="width:100%;margin-bottom:50px;">
+    <CardHeader Color="CardColor.Light">
+        <div class="row">
+            <div class="col-lg-9">
+                <h2>Edit Classroom</h2>
+            </div>
+            <div class="col-lg-3 text-right">                
+                <a style="border:none;background-color:transparent;" href="/classroom" role="button">
+                    <Icon Name="IconName.TextIndentRight" Size="IconSize.x2" Color="IconColor.Primary" /></a>
+
+            </div>
+        </div>
+        
+    </CardHeader>
+    <CardBody>
+        <EditForm Model="@classRoomObj" OnValidSubmit="UpdateClassroom">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="Classroom" class="control-label"> Classroom Name</label>
+                        <input for="Classroom" class="form-control" @bind="@classRoomObj.ClassName" required />
+                        <ValidationMessage For="@(() => classRoomObj.ClassName)" />
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top:20px;">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Update" />
+                        <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+    </CardBody>
+</Card>
+
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+    ClassRoom classRoomObj = new ClassRoom();
+
+    protected override async Task OnInitializedAsync()
+    {
+        classRoomObj = await Task.Run(() => ClassRoomService.GetClassRoomById(Convert.ToInt32(id)));
+    }
+
+   
+    protected async Task UpdateClassroom()
+    {
+        await ClassRoomService.UpdateClassRoom(classRoomObj);
+        NavigationManager.NavigateTo("classroom");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("classroom");
+    }
+}

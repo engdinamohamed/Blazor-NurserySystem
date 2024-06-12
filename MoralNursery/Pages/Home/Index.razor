@@ -1,0 +1,72 @@
+﻿@page "/home/index"
+@inject IRegisterService RegisterService
+@inject IFeeMethodService FeeMethodService
+@using System.Drawing
+<h3 style="text-align:center;display:block;">Student registrations during the year</h3>
+
+@page "/registration-chart"
+@using BlazorBootstrap
+@using System.Drawing
+@inject IRegisterService RegisterService
+@inject IFeeMethodService FeeMethodService
+
+<BarChart @ref="barChart" Class="mb-4" Style="margin:auto;width:90%" />
+
+@code {
+    private BarChart barChart = default!;
+    private BarChartOptions barChartOptions = default!;
+    private ChartData chartData = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var year = DateTime.Now.Year;
+        var monthlyRegistrations = await RegisterService.GetMonthlyRegistrationsByFeeMethods(year);
+
+        var labels = new List<string>
+        {
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        };
+
+        var datasets = new List<IChartDataset>();
+        var colorIndex = 0;
+        foreach (var feeMethod in monthlyRegistrations.Keys)
+        {
+            var color = ColorBuilder.CategoricalTwelveColors[colorIndex % 12].ToColor();
+            var dataset = new BarChartDataset
+                {
+                    Label = feeMethod,
+                    Data = monthlyRegistrations[feeMethod].Select(count => (double)count).ToList(),
+                    BackgroundColor = new List<string> { ColorExtensions.ToRgbString(color) },
+                    BorderColor = new List<string> { ColorExtensions.ToRgbString(color) },
+                    BorderWidth = new List<double> { 1 }
+                };
+            datasets.Add(dataset);
+            colorIndex++;
+        }
+
+        chartData = new ChartData
+            {
+                Labels = labels,
+                Datasets = datasets
+            };
+
+        barChartOptions = new BarChartOptions
+            {
+                Responsive = true,
+                Interaction = new Interaction { Mode = InteractionMode.Index },
+                IndexAxis = "x" // Set the chart to vertical
+            };
+
+        await barChart.InitializeAsync(chartData, barChartOptions);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await barChart.InitializeAsync(chartData, barChartOptions);
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}

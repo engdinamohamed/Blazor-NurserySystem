@@ -1,0 +1,73 @@
+﻿@page "/user/detail/{id:int}"
+@inject IUserService UserService;
+@inject NavigationManager NavigationManager
+
+@if (userObj != null)
+{
+
+    <Card Style="width:100%;margin-bottom:50px;">
+    <CardHeader Color="CardColor.Light">
+        <div class="row">
+            <div class="col-lg-9">
+                    <h2>@userObj.FullName</h2>
+            </div>
+            <div class="col-lg-3 text-right">                
+                <a style="border:none;background-color:transparent;" href="/user" role="button">
+                    <Icon Name="IconName.TextIndentRight" Size="IconSize.x2" Color="IconColor.Primary" />
+                </a>
+
+            </div>
+        </div>
+        
+    </CardHeader>
+    <CardBody>
+
+
+            <table class="table" style="margin-top:40px;">
+                <tbody>
+
+                   
+                    <tr>
+                        <th scope="row">Active</th>
+                        <td>@(userObj.IsActive == true ? "Yes" : "No")</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"> Phone Number</th>
+                        <td>@userObj.PhoneNumber</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Address</th>
+                        <td>@userObj.Address</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Email</th>
+                        <td>@userObj.Email</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"> Roles</th>
+                        <td>
+                            @if (userObj.Roles != null && userObj.Roles.Any())
+                            {
+                                @string.Join(", ", userObj.Roles.Select(role => role.RoleName))
+                            }
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+    </CardBody>
+</Card>
+
+
+}
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+    User userObj = new User();
+    protected override async Task OnInitializedAsync()
+    {
+        userObj = await Task.Run(() => UserService.GetUserById(Convert.ToInt32(id)));
+    }
+   
+}

@@ -1,0 +1,158 @@
+﻿@page "/register/detail/{registerId:int}"
+@inject IPaymentService PaymentService;
+@inject IRegisterService RegisterService;
+@inject NavigationManager NavigationManager
+
+@if (registerObj != null)
+{
+
+    <Card Style="width:100%;margin-bottom:50px;">
+    <CardHeader Color="CardColor.Light">
+        <div class="row">
+            <div class="col-lg-9">
+                <h2>Register Details</h2>
+            </div>
+            <div class="col-lg-3 text-right">                
+                <a style="border:none;background-color:transparent;" href="/register" role="button">
+                    <Icon Name="IconName.TextIndentRight" Size="IconSize.x2" Color="IconColor.Primary" />
+                </a>
+
+            </div>
+        </div>
+        
+    </CardHeader>
+    <CardBody>
+            @if (registerObj != null)
+            {
+                <table class="table table-striped">
+                    <thead>
+                        <tr class="table-primary" style="text-align:center;"><th colspan="4">Info</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row" style="width:30%">Student Code</th>
+                            <td>@registerObj?.Student?.StudentCode</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width:30%">Student Name</th>
+                            <td>@registerObj?.Student?.StudentName</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width:30%">Classroom</th>
+                            <td>@registerObj?.Student?.ClassRoom?.ClassName</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width:30%">Subscription Type </th>
+                            <td>@registerObj?.FeeMethod?.FeeMethodName</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width:30%"> Subscription Fee </th>
+                            <td>@registerObj?.SubscriptionFee</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width:30%;color:red;">Discount </th>
+                            <td style="color:red;">@registerObj?.Discount</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width:30%">Registration Fee </th>
+                            <td>@registerObj?.RegistrationFee</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width:30%">Bus Fee </th>
+                            <td>@registerObj?.BusFee</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width:30%">Books Fee </th>
+                            <td>@registerObj?.BooksFee</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width:30%">Costumes Fee </th>
+                            <td>@registerObj?.CostumesFee</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width:30%;color:forestgreen;" >Total required Fees </th>
+                            <td>@totalFees</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width:30%">Start Date</th>
+                            <td>@registerObj?.StartDate.ToShortDateString()</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width:30%">End Date</th>
+                            <td>@registerObj.EndDate.ToShortDateString()</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width:30%">Register Date</th>
+                            <td>@registerObj?.AddedIn.ToShortDateString()</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+            }
+
+            @if (paymentList != null)
+            {
+                <table class="table table-striped">
+                    <thead>
+                        <tr class="table-primary" style="text-align:center;"><th colspan="4">Payments</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Payment Method</th>
+                            <th>Amount</th>
+                            <th>Payment Date</th>
+                            <th>Employee Name</th>
+                        </tr>
+                       
+                            @if (paymentList != null)
+                            {
+                                @foreach (var paymentObj in paymentList)
+                                { 
+                                    <tr>
+                                    <td>@paymentObj?.PaymentMethod?.PaymentMethodName</td>
+                                    <td>@paymentObj?.Amount</td>
+                                    <td>@paymentObj?.AddedIn.ToShortDateString()</td>
+                                    <td>@paymentObj?.User?.Username</td></tr>
+                                }
+                            }
+
+                        
+
+
+
+
+
+                    </tbody>
+                </table>
+
+            }
+    </CardBody>
+    </Card>
+
+
+    
+
+
+}
+
+@code {
+    [Parameter]
+    public int registerId { get; set; }
+
+    //Payment paymentObj = new Payment();
+    Register registerObj = new Register();
+
+    List<Payment> paymentList = new List<Payment>();
+    float totalFees = 0;
+    protected override async Task OnInitializedAsync()
+    {
+        registerObj = await Task.Run(() => RegisterService.GetRegisterById(Convert.ToInt32(registerId)));
+        paymentList = await PaymentService.GetPaymentByRegisterId(registerId);
+        totalFees = registerObj.SubscriptionFee + registerObj.RegistrationFee + registerObj.BusFee + registerObj.CostumesFee +
+        registerObj.BooksFee - registerObj.Discount;
+
+
+    }
+
+}

@@ -1,0 +1,99 @@
+﻿@inherits LayoutComponentBase
+@inject ProtectedSessionStorage ProtectedSessionStore
+@inject NavigationManager NavigationManager
+
+<PageTitle>MoralNursery</PageTitle>
+<head>
+    <script>
+        function saveAsFile(filename, bytesBase64) {
+            var link = document.createElement('a');
+            link.download = filename;
+            link.href = 'data:application/octet-stream;base64,' + bytesBase64;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+
+</head>
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        @if (!string.IsNullOrEmpty(UserName) && UserId>0)
+        {
+           @*  <div class="top-row px-4 d-flex justify-content-between align-items-center">
+                <div>
+                    <p>Welcome, @UserName!</p>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-primary" @onclick="Logout">Logout</button>
+                </div>
+            </div> *@
+           
+            <div class="top-row px-4 d-flex ">
+                <Dropdown Size="Size.Large">
+                    <DropdownToggleButton Style="background-color:#f7f7f7"><Icon Name="IconName.PersonCircle" Style="margin-right:5px;" />Welcome, @UserName!</DropdownToggleButton>
+                    <DropdownMenu>
+                        <DropdownItem Size="Size.Large" To="@editlLink" Type="ButtonType.Link">Edit Profile<Icon Name="IconName.WrenchAdjustable" Style="margin-left:5px;" /></DropdownItem>
+
+                        <DropdownItem To="@changePasswordLink" Type="ButtonType.Link">Change Password<Icon Name="IconName.Lock" Style="margin-left:5px;" /></DropdownItem>
+                        <DropdownDivider>Dropdown header</DropdownDivider>                       
+                        <DropdownItem Style="text-align:center;" Type="ButtonType.Button" @onclick="@(e => Logout())">Logout<Icon Name="IconName.DoorOpen" Style="margin-left:5px;" /></DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
+               
+            </div>
+        }
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+@code{
+    string UserName { get; set; }
+    int UserId { get; set; }
+
+    string editlLink;
+    string changePasswordLink;
+    protected override async Task OnInitializedAsync()
+    {
+        // Retrieve username from session
+        try
+        {
+            var result_UserName = await ProtectedSessionStore.GetAsync<string>("UserName");
+            if (result_UserName.Success)
+            {
+                UserName = result_UserName.Value;
+            }
+            var result_UserId = await ProtectedSessionStore.GetAsync<int>("UserId");
+            if (result_UserId.Success)
+            {
+                UserId = result_UserId.Value;
+                editlLink = "/user/edit/" + UserId;
+                changePasswordLink = "/user/pass/" + UserId;
+            }
+            if (UserName == null || UserId == 0)
+            {
+                NavigationManager.NavigateTo("/login");
+            }
+        }
+        catch
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+
+       
+    }
+    async Task Logout()
+    {
+        // Clear user-related data from ProtectedSessionStore
+        await ProtectedSessionStore.DeleteAsync("UserName");
+        await ProtectedSessionStore.DeleteAsync("UserId");
+        NavigationManager.NavigateTo("/login");
+
+    }
+}

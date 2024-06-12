@@ -1,0 +1,171 @@
+﻿@page "/role"
+@page "/role/list"
+@inject IRoleService RoleService
+@inject IJSRuntime JSRuntime
+@inject ProtectedSessionStorage ProtectedSessionStore
+@inject NavigationManager NavigationManager
+@inject IUserService UserService
+
+<ConfirmDialog @ref="dialog" />
+<Toasts class="p-3" Messages="messages" AutoHide="true" Delay="2000" Placement="ToastsPlacement.TopRight" />
+
+<Card Style="width:100%;margin-bottom:50px;">
+    <CardHeader Color="CardColor.Light">
+        <h2>Permissions</h2>
+        <button style="border:none;background-color:transparent;" @onclick="NavigateToCreate" disabled="@checkRole2("add-role")"><Icon Name="IconName.PlusCircleFill" Size="IconSize.x2" Color="IconColor.Success" /></button>
+        
+    </CardHeader>
+    <CardBody>
+         <div>
+        @if (roleList is null)
+        {
+            <p><em>Nothing yet.........................!</em></p>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Role Name</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var role in roleList)
+                    {
+                        string detailLink = $"/role/detail/{role.Id}";
+                        string editlLink = $"/role/edit/{role.Id}";
+
+                        <tr>
+                            <td>@role.RoleName</td>
+
+                            <td class="text-right">
+                                <Dropdown>
+                                    <DropdownToggleButton Color="ButtonColor.Secondary">
+                                        <Icon Name="IconName.GearFill" Class="menuIcons"></Icon>
+                                    </DropdownToggleButton>
+                                    <DropdownMenu>
+                                        <DropdownItem To="@detailLink" Type="ButtonType.Link">Details</DropdownItem>
+
+                                        <DropdownItem To="@editlLink" Type="ButtonType.Link" Disabled="@checkRole("edit-role",@role.RoleName)">Edit</DropdownItem>
+
+
+
+                                        <DropdownItem Type="ButtonType.Button" Disabled="@checkRole("delete-role",@role.RoleName)" @onclick="@(e => DeleteRole(role))">Delete</DropdownItem>
+
+                                    </DropdownMenu>
+                                </Dropdown>
+
+
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+
+    </div>
+
+    </CardBody>
+</Card>
+
+
+
+
+@code {
+    List<Role> roleList = new List<Role>();
+    public User user_sesstion = new User();
+    private ConfirmDialog dialog = default!;
+    List<ToastMessage> messages = new List<ToastMessage>();
+    private void ShowMessage(ToastType toastType, string title, string msg) => messages.Add(CreateToastMessage(toastType, title, msg));
+
+    private ToastMessage CreateToastMessage(ToastType toastType, string title, string msg)
+    => new ToastMessage
+        {
+            Type = toastType,
+            Title = title,
+            Message = msg,
+        };
+
+    protected override async Task OnInitializedAsync()
+    {
+        int userId = 0;
+
+        roleList = await Task.Run(() => RoleService.GetRoles());
+        var result_UserId = await ProtectedSessionStore.GetAsync<int>("UserId");
+        if (result_UserId.Success)
+        {
+            userId = result_UserId.Value;
+        }
+        if (userId > 0)
+        {
+            user_sesstion = await Task.Run(() => UserService.GetUserById(userId));
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+    }
+    bool checkRole(string roleName,string userRole)
+    {
+        if (userRole.ToLower().Equals("administrator"))
+        { 
+            return true;
+        }
+        if (user_sesstion?.Roles?.Any(role => role.Functions.Any(rf => rf.FunctionName == roleName)) ?? false)
+            return false;
+        return true;
+    }
+    bool checkRole2(string roleName)
+    {
+        if (user_sesstion?.Roles?.Any(role => role.Functions.Any(rf => rf.FunctionName == roleName)) ?? false)
+            return false;
+        return true;
+    }
+
+    async Task DeleteRole(Role role)
+    {
+        bool success = false;
+        var confirmation = await dialog.ShowAsync(
+            title: $"Are you sure you want to delete role: ({role.RoleName})?",
+            message1: "This will delete the role. Once deleted can not be rolled back.",
+            message2: "Do you want to proceed?");
+
+        if (confirmation)
+        {
+            try
+            {
+                if (role != null)
+                {
+                    success = await RoleService.DeleteRole(role);
+                    if (success)
+                    {
+                        ShowMessage(ToastType.Success, "delete succeeded", "The role has been deleted successfully.");
+                        roleList.RemoveAll(x => x.Id == role.Id);
+                    }
+                }
+            }
+            catch
+            {
+                ShowMessage(ToastType.Danger, "Deleting Error", "Unable to delete the role as it is associated with other entries.");
+            }
+
+        }
+       
+
+
+
+
+    }
+    void NavigateToCreate()
+    {
+        if (!checkRole2("add-role"))
+        {
+            NavigationManager.NavigateTo("/role/create");
+        }
+    }
+
+
+}

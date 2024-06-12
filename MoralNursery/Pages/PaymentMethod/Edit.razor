@@ -1,0 +1,62 @@
+﻿@page "/paymentmethod/edit/{id:int}"
+@inject IPaymentMethodService PaymentMethodService
+@inject NavigationManager NavigationManager
+
+<Card Style="width:100%;margin-bottom:50px;">
+    <CardHeader Color="CardColor.Light">
+        <div class="row">
+            <div class="col-lg-9">
+            <h2>Edit Payment Method</h2>
+            </div>
+            <div class="col-lg-3 text-right">                
+                <a style="border:none;background-color:transparent;" href="/paymentmethod" role="button">
+                    <Icon Name="IconName.TextIndentRight" Size="IconSize.x2" Color="IconColor.Primary" />
+                </a>
+
+            </div>
+        </div>
+        
+    </CardHeader>
+    <CardBody>
+    <EditForm Model="@paymentMethodObj" OnValidSubmit="EditPaymentMethod">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label for="Classroom" class="control-label"> Payment Method</label>
+                    <input for="Classroom" class="form-control" @bind="@paymentMethodObj.PaymentMethodName" required />
+                    <ValidationMessage For="@(() => paymentMethodObj.PaymentMethodName)" />
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top:20px;">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" value="Update" />
+                    <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+                </div>
+            </div>
+        </div>
+    </EditForm>
+    </CardBody>
+</Card>
+
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    PaymentMethod paymentMethodObj = new PaymentMethod();
+    protected override async Task OnInitializedAsync()
+    {
+        paymentMethodObj = await Task.Run(() => PaymentMethodService.GetPaymentMethodById(Convert.ToInt32(id)));
+    }
+    protected async Task EditPaymentMethod()
+    {
+        await PaymentMethodService.UpdatePaymentMethod(paymentMethodObj);
+        NavigationManager.NavigateTo("paymentmethod");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("paymentmethod");
+    }
+}

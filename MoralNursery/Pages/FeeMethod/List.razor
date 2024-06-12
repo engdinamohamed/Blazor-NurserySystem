@@ -1,0 +1,155 @@
+﻿@page "/feemethod"
+@page "/feemethod/list"
+@inject IFeeMethodService FeeMethodService
+@inject IJSRuntime JSRuntime
+@inject ProtectedSessionStorage ProtectedSessionStore
+@inject NavigationManager NavigationManager
+@inject IUserService UserService
+
+<ConfirmDialog @ref="dialog" />
+<Toasts class="p-3" Messages="messages" AutoHide="true" Delay="2000" Placement="ToastsPlacement.TopRight" />
+
+<Card Style="width:100%;margin-bottom:50px;">
+    <CardHeader Color="CardColor.Light">
+        <h2>Subscription Methods</h2>
+        <button style="border:none;background-color:transparent;" @onclick="NavigateToCreate" disabled="@checkRole("add-fee-method")"><Icon Name="IconName.PlusCircleFill" Size="IconSize.x2" Color="IconColor.Success" /></button>      
+    </CardHeader>
+    <CardBody>
+        <div>
+            @if (feeMethodList is null)
+            {
+                <p><em>Nothing yet.........................!</em></p>
+            }
+            else
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Subscription Method</th>
+                            <th> Amount</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var feeMethod in feeMethodList)
+                        {
+                            // string detailLink = $"/classroom/detail/{classRoom.Id}";
+                            string editlLink = $"/feemethod/edit/{feeMethod.Id}";
+
+                            <tr>
+                                <td>@feeMethod.FeeMethodName</td>
+                                <td>@feeMethod.FeeQ</td>
+
+                                <td class="text-right">
+                                    <Dropdown>
+                                        <DropdownToggleButton Color="ButtonColor.Secondary">
+                                            <Icon Name="IconName.GearFill" Class="menuIcons"></Icon>
+                                        </DropdownToggleButton>
+                                        <DropdownMenu>
+
+                                            <DropdownItem To="@editlLink" Type="ButtonType.Link" Disabled="@checkRole("edit-fee-method")">Edit</DropdownItem>
+
+                                            <DropdownItem Type="ButtonType.Button" Disabled="@checkRole("delete-fee-method")" @onclick="@(e => DeleteFeeMethod(feeMethod))">Delete</DropdownItem>
+
+                                        </DropdownMenu>
+                                    </Dropdown>
+
+
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+
+        </div>
+    </CardBody>
+   
+</Card>
+
+
+
+
+
+
+@code {
+    List<FeeMethod> feeMethodList = new List<FeeMethod>();
+    public User user_sesstion = new User();
+    private ConfirmDialog dialog = default!;
+    List<ToastMessage> messages = new List<ToastMessage>();
+    private void ShowMessage(ToastType toastType, string title, string msg) => messages.Add(CreateToastMessage(toastType, title, msg));
+
+    private ToastMessage CreateToastMessage(ToastType toastType, string title, string msg)
+    => new ToastMessage
+        {
+            Type = toastType,
+            Title = title,
+            Message = msg,
+        };
+    protected override async Task OnInitializedAsync()
+    {
+        int userId = 0;
+
+        feeMethodList = await Task.Run(() => FeeMethodService.GetFeeMethods());
+        var result_UserId = await ProtectedSessionStore.GetAsync<int>("UserId");
+        if (result_UserId.Success)
+        {
+            userId = result_UserId.Value;
+        }
+        if (userId > 0)
+        {
+            user_sesstion = await Task.Run(() => UserService.GetUserById(userId));
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+    }
+    bool checkRole(string roleName)
+    {
+        if (user_sesstion?.Roles?.Any(role => role.Functions.Any(rf => rf.FunctionName == roleName)) ?? false)
+            return false;
+        return true;
+    }
+
+    async Task DeleteFeeMethod(FeeMethod feetMethod)
+    {
+        bool success = false;
+        var confirmation = await dialog.ShowAsync(
+            title: $"Are you sure you want to delete Subscription Method: ({feetMethod.FeeMethodName})?",
+            message1: "This will delete the Fee Method. Once deleted can not be rolled back.",
+            message2: "Do you want to proceed?");
+        try
+        {
+            if (confirmation)
+            {
+                if (feetMethod != null)
+                {
+                    success = await FeeMethodService.DeleteFeeMethod(feetMethod);
+                    if (success)
+                    {
+                        ShowMessage(ToastType.Success, "delete succeeded", "The Subscription has been deleted successfully.");
+                        feeMethodList.RemoveAll(x => x.Id == feetMethod.Id);
+                    }
+                }
+            }
+        }
+        catch
+        {
+            ShowMessage(ToastType.Danger, "Deleting Error", "Unable to delete the Subscription methods as it is associated with other entries.");
+
+        }
+
+    }
+    void NavigateToCreate()
+    {
+        if (!checkRole("add-fee-method"))
+        {
+            NavigationManager.NavigateTo("/feemethod/create");
+        }
+    }
+
+
+}

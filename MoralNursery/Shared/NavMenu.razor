@@ -1,0 +1,85 @@
+﻿<style>
+    .menuIcons {
+        margin-right:5px;
+        padding-left: 10px;
+        
+    }
+</style>
+
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">Moral Nursery</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
+
+<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="home/index" Match="NavLinkMatch.All">
+                <Icon Name="IconName.House" Class="menuIcons"></Icon>
+                Home
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="classroom">
+                <Icon Name="IconName.MortarboardFill" Class="menuIcons"></Icon>
+                Classrooms
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="student">
+                <Icon Name="IconName.BalloonHeart" Class="menuIcons"></Icon> Students
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="register">
+                <Icon Name="IconName.Book" Class="menuIcons"></Icon>  Registers
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="payment">
+                <Icon Name="IconName.CurrencyDollar" Class="menuIcons"></Icon>  Payments
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="paymentmethod">
+                <Icon Name="IconName.CreditCard" Class="menuIcons"></Icon>  Payments Methods
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="feemethod">
+                <Icon Name="IconName.CalendarDate" Class="menuIcons"></Icon>  Subscription Methods
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="user">
+                <Icon Name="IconName.PersonGear" Class="menuIcons"></Icon>  Users
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="role">
+                <Icon Name="IconName.Key" Class="menuIcons"></Icon>  Permissions
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="info">
+                <Icon Name="IconName.InfoCircle" Class="menuIcons"></Icon>Nursery  Info
+            </NavLink>
+        </div>
+        
+    </nav>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}

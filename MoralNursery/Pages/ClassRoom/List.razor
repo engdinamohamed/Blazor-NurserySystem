@@ -1,0 +1,222 @@
+﻿@page "/classroom"
+@page "/classroom/list"
+@inject IClassRoomService ClassRoomService
+@inject IJSRuntime JSRuntime
+@inject ProtectedSessionStorage ProtectedSessionStore
+@inject NavigationManager NavigationManager
+@inject IUserService UserService
+
+<ConfirmDialog @ref="dialog" />
+<Toasts class="p-3" Messages="messages" AutoHide="true" Delay="2000" Placement="ToastsPlacement.TopRight" />
+<Card Style="width:100%;margin-bottom:50px;">
+    <CardHeader Color="CardColor.Light">
+        <h2>Classrooms</h2>  
+        <button style="border:none;background-color:transparent;" @onclick="NavigateToCreate" disabled="@checkRole("add-classroom")">
+            <Icon Name="IconName.PlusCircleFill" Size="IconSize.x2" Color="IconColor.Success" /></button>
+    </CardHeader>
+    <CardBody>
+        <Grid @ref="grid" TItem="ClassroomDto"
+              Class="table table-hover table-bordered table-striped"
+              DataProvider="ClassroomDataProvider"
+              AllowFiltering="true"
+              AllowPaging="true"
+              PageSize="20"
+              AllowSorting="true"
+              AllowSelection="false"
+              Responsive="true" style="font-size:14px;">
+
+
+            <GridColumn FilterTextboxWidth="150" TItem="ClassroomDto" HeaderText="Classroom" PropertyName="ClassName" SortKeySelector="item => item.ClassName">
+                @context.ClassName
+            </GridColumn>
+            <GridColumn  TItem="ClassroomDto" HeaderText="Number of Students" PropertyName="StudentsCount" SortKeySelector="item => item.StudentsCount">
+                @context.StudentsCount
+            </GridColumn>
+
+            <GridColumn TItem="ClassroomDto" Filterable="false" Sortable="false">
+                <Dropdown>
+                    <DropdownToggleButton Color="ButtonColor.Secondary">
+                        <Icon Name="IconName.GearFill" Class="menuIcons"></Icon>
+                    </DropdownToggleButton>
+                    <DropdownMenu>
+                        <DropdownItem Type="ButtonType.Button" @onclick="@(e => NavigateToDetail(context.Id))">Details</DropdownItem>
+                        <DropdownItem Type="ButtonType.Button" Disabled="@checkRole("edit-classroom")" @onclick="@(e => NavigateToEdit(context.Id))">Edit</DropdownItem>
+                        <DropdownItem Type="ButtonType.Button" Disabled="@checkRole("delete-classroom")" @onclick="@(e => DeleteClassRoom(context.Id))">Delete</DropdownItem>
+                        <DropdownItem Type="ButtonType.Button" @onclick="@(e => NavigateToEnrolledLink(context.Id))">Enrolled Students</DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
+            </GridColumn>
+
+        </Grid>
+    </CardBody>
+    <CardFooter>
+        <button class="btn btn-primary" @onclick="ExportToExcel">Export to Excel</button>
+    </CardFooter>
+</Card>
+
+@code {
+    private bool isDataFetched = false;
+    Grid<ClassroomDto> grid;
+    private IEnumerable<ClassroomDto> classrooms = default!;
+    private IEnumerable<ClassroomDto> filteredClassrooms = default!;
+    List<ClassRoom> classroomList= new List<ClassRoom>();
+    public User user_sesstion = new User();
+    private Dictionary<int, int> studentCounts = new Dictionary<int, int>();
+
+    private ConfirmDialog dialog = default!;
+    List<ToastMessage> messages = new List<ToastMessage>();
+    private void ShowMessage(ToastType toastType, string title, string msg) => messages.Add(CreateToastMessage(toastType, title, msg));
+
+    private ToastMessage CreateToastMessage(ToastType toastType, string title, string msg)
+    => new ToastMessage
+        {
+            Type = toastType,
+            Title = title,
+            Message = msg,
+        };
+
+
+    bool checkRole(string roleName)
+    {
+        if (user_sesstion?.Roles?.Any(role => role.Functions.Any(rf => rf.FunctionName == roleName)) ?? false)
+            return false;
+        return true;
+    }
+
+    async Task DeleteClassRoom(int classroomId)
+    {
+        bool success = false;
+        ClassRoom classroom = await ClassRoomService.GetClassRoomById(classroomId);
+        var confirmation = await dialog.ShowAsync(
+            title: $"Are you sure you want to delete classroom: ({classroom.ClassName})?",
+            message1: "This will delete the classroom. Once deleted can not be rolled back.",
+            message2: "Do you want to proceed?");
+
+        if (confirmation)
+        {
+            try
+            {
+                if (classroom != null)
+                {
+                    success = await ClassRoomService.DeleteClassRoom(classroom);
+
+                   
+                    if (success)
+                    {
+                        ShowMessage(ToastType.Success, "delete succeeded", "The classroom has been deleted successfully.");
+                        classroomList.RemoveAll(x => x.Id == classroom.Id);
+                        await FetchClassroomData();
+                        await grid.RefreshDataAsync();
+                        StateHasChanged();
+                    }
+                }
+            }
+            catch
+            {
+                ShowMessage(ToastType.Danger, "Deleting Error", "Unable to delete the classroom as it is associated with other entries.");
+            }
+            
+        }
+       
+       
+       
+    }
+
+    void NavigateToCreate()
+    {
+        if (!checkRole("add-classroom"))
+        {
+            NavigationManager.NavigateTo("/classroom/create");
+        }
+    }
+    void NavigateToEdit(int classroomId)
+    {
+        NavigationManager.NavigateTo($"/classroom/edit/{classroomId}");
+    }
+    void NavigateToDetail(int classroomId)
+    {
+        NavigationManager.NavigateTo($"/classroom/detail/{classroomId}");
+    }
+    void NavigateToEnrolledLink(int classroomId)
+    {
+        NavigationManager.NavigateTo($"/student/list/{classroomId}");
+    }
+
+    private async Task<GridDataProviderResult<ClassroomDto>> ClassroomDataProvider(GridDataProviderRequest<ClassroomDto> request)
+    {
+        if (!isDataFetched)
+        {
+            await FetchClassroomData();
+        }
+
+        //return request.ApplyTo(classrooms);
+        var result = request.ApplyTo(classrooms);
+        filteredClassrooms = result.Data; // Store the filtered data
+        return result;
+    }
+    private async Task FetchClassroomData()
+    {
+        int userId = 0;
+        var result_UserId = await ProtectedSessionStore.GetAsync<int>("UserId");
+        if (result_UserId.Success)
+        {
+            userId = result_UserId.Value;
+        }
+
+        if (userId > 0)
+        {
+            user_sesstion = await Task.Run(() => UserService.GetUserById(userId));
+            classroomList = await  ClassRoomService.GetClassRooms();
+            
+            
+            foreach (var classroom in classroomList)
+            {
+                int count = await ClassRoomService.GetStudentNumberInClassroom(classroom.Id) ?? 0;
+                studentCounts[classroom.Id] = count;
+            }
+            classrooms = classroomList.Select(classroom => new ClassroomDto
+                {
+                    Id = classroom.Id,
+                    ClassName = classroom.ClassName,
+                    StudentsCount = studentCounts[classroom.Id]
+
+                }).ToList();
+            isDataFetched = true;
+            StateHasChanged(); // Trigger a re-render
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+
+    }
+
+    private async Task ExportToExcel()
+    {
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+        using var package = new ExcelPackage();
+        var worksheet = package.Workbook.Worksheets.Add("ClassRooms");
+
+        // Add headers
+        worksheet.Cells[1, 1].Value = "Classroom";
+        worksheet.Cells[1, 2].Value = "Num of Students";       
+
+        // Add filtered data
+        int row = 2;
+        foreach (var classroom in filteredClassrooms)
+        {
+            worksheet.Cells[row, 1].Value = classroom.ClassName;
+            worksheet.Cells[row, 2].Value = studentCounts[classroom.Id];
+          
+            row++;
+        }
+
+        // Convert the package to a byte array
+        var fileBytes = package.GetAsByteArray();
+
+        // Trigger the download in the browser
+        var fileName = $"ClassRooms_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+        await JSRuntime.InvokeVoidAsync("saveAsFile", fileName, Convert.ToBase64String(fileBytes));
+    }
+   
+}

@@ -1,0 +1,89 @@
+﻿@page "/role/detail/{roleId:int}"
+@inject IRoleService RoleService;
+@inject IFunctionService FunctionService;
+@inject IUserService UserService;
+@inject NavigationManager NavigationManager
+
+@if (roleObj != null)
+{
+    <Card Style="width:100%;margin-bottom:50px;">
+        <CardHeader Color="CardColor.Light">
+            <div class="row">
+                <div class="col-lg-9">
+                    <h2>@roleObj.RoleName</h2>
+                </div>
+                <div class="col-lg-3 text-right">
+                    <a style="border:none;background-color:transparent;" href="/role" role="button">
+                        <Icon Name="IconName.TextIndentRight" Size="IconSize.x2" Color="IconColor.Primary" />
+                    </a>
+
+                </div>
+            </div>
+
+        </CardHeader>
+        <CardBody>
+            <table class="table table-striped">
+                <thead>
+                    <tr class="table-primary" style="text-align:center;"><th>Functions</th></tr>
+                </thead>
+
+                <tbody>
+                    @if (roleObj.Functions != null)
+                    {
+                        @foreach (var function in roleObj.Functions)
+                        {
+                            <tr>
+
+                                <td>
+                                    <span style="display:block;">@function.FunctionName</span>
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                </tbody>
+                <thead >
+                    <tr class="table-primary" style="text-align:center;"><th>Users</th></tr>
+                </thead>
+                <tbody>
+
+                    @if (userList != null)
+                    {
+                        @foreach (var user in userList)
+                        {
+                            <tr>
+                                <td>
+                                    <span style="display:block;">@user.Username</span>
+                                </td>
+                            </tr>
+
+
+
+
+                        }
+                    }
+
+
+                </tbody>
+            </table>
+        </CardBody>
+    </Card>
+
+
+
+}
+
+@code {
+    [Parameter]
+    public int roleId { get; set; }
+    Role roleObj = new Role();
+
+    List<User> userList = new List<User>();
+    protected override async Task OnInitializedAsync()
+    {
+        roleObj = await Task.Run(() => RoleService.GetRoleById(Convert.ToInt32(roleId)));
+        userList = await Task.Run(() => UserService.GetUserByRoleId(roleId));
+        // functionList = roleObj.Functions;
+    }
+
+}

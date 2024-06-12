@@ -1,0 +1,264 @@
+﻿@page "/payment"
+@page "/payment/{registerId:int}"
+@page "/payment/list"
+@page "/payment/list/{registerId:int}"
+
+@inject IPaymentService PaymentService
+@inject IJSRuntime JSRuntime
+@inject ProtectedSessionStorage ProtectedSessionStore
+@inject NavigationManager NavigationManager
+@inject IUserService UserService
+
+<ConfirmDialog @ref="dialog" />
+<Toasts class="p-3" Messages="messages" AutoHide="true" Delay="2000" Placement="ToastsPlacement.TopRight" />
+
+<Card Style="width:100%;margin-bottom:50px;">
+    <CardHeader Color="CardColor.Light">
+        <h2>Payments</h2>
+    </CardHeader>
+    <CardBody>
+        <Grid @ref="grid" TItem="PaymentDto"
+              Class="table table-hover table-bordered table-striped"
+              DataProvider="PaymentDataProvider"
+              AllowFiltering="true"
+              AllowPaging="true"
+              PageSize="20"
+              AllowSorting="true"
+              AllowSelection="false"
+              Responsive="true" style="font-size:14px;">
+
+
+            <GridColumn FilterTextboxWidth="80" TItem="PaymentDto" HeaderText="Code" PropertyName="StudentCode" SortKeySelector="item => item.StudentCode">
+                @context.StudentCode
+            </GridColumn>
+            <GridColumn FilterTextboxWidth="150" TItem="PaymentDto" HeaderText="Student Name" PropertyName="StudentName" SortKeySelector="item => item.StudentName">
+                @context.StudentName
+            </GridColumn>
+            <GridColumn FilterTextboxWidth="100" TItem="PaymentDto" HeaderText="Classroom" PropertyName="ClassName" SortKeySelector="item => item.ClassName">
+                @context.ClassName
+            </GridColumn>
+            <GridColumn FilterTextboxWidth="100" TItem="PaymentDto" HeaderText="Subscription" PropertyName="FeeMethodName" SortKeySelector="item => item.FeeMethodName">
+                @context.FeeMethodName
+            </GridColumn>
+            <GridColumn FilterTextboxWidth="100" TItem="PaymentDto" HeaderText="Total Fees After Discount" PropertyName="TotalFees" SortKeySelector="item => item.TotalFees">
+                @context.TotalFees
+            </GridColumn>
+            <GridColumn FilterTextboxWidth="100" TItem="PaymentDto" HeaderText="Start Date" PropertyName="StartDate" SortKeySelector="item => item.StartDate">
+                @context.StartDate.ToString("dd/MM/yyyy")
+            </GridColumn>
+            <GridColumn FilterTextboxWidth="100" TItem="PaymentDto" HeaderText="End Date" PropertyName="StartDate" SortKeySelector="item => item.EndDate">
+                @context.EndDate.ToString("dd/MM/yyyy")
+            </GridColumn>
+            <GridColumn FilterTextboxWidth="80" TItem="PaymentDto" HeaderText="Payment Amount" PropertyName="Amount" SortKeySelector="item => item.Amount">
+                @context.Amount
+            </GridColumn>
+            <GridColumn FilterTextboxWidth="80" TItem="PaymentDto" HeaderText="Payment Method" PropertyName="PaymentMethodName" SortKeySelector="item => item.PaymentMethodName">
+                @context.PaymentMethodName
+            </GridColumn>
+            <GridColumn FilterTextboxWidth="100" TItem="PaymentDto" HeaderText="Payment Date" PropertyName="AddedIn" SortKeySelector="item => item.AddedIn">
+                @context.AddedIn.ToString("dd/MM/yyyy")
+            </GridColumn>
+            <GridColumn FilterTextboxWidth="100" TItem="PaymentDto" HeaderText="Employee Name" PropertyName="FullName" SortKeySelector="item => item.FullName">
+                @context.FullName
+            </GridColumn>
+            <GridColumn TItem="PaymentDto" Filterable="false" Sortable="false">
+                <Dropdown>
+                    <DropdownToggleButton Color="ButtonColor.Secondary">
+                        <Icon Name="IconName.GearFill" Class="menuIcons"></Icon>
+                    </DropdownToggleButton>
+                    <DropdownMenu>
+                        <DropdownItem Type="ButtonType.Button" @onclick="@(e => NavigateToDetail(context.Id))">Details</DropdownItem>
+                        <DropdownItem Type="ButtonType.Button" Disabled="@checkRole("edit-payment")" @onclick="@(e => NavigateToEdit(context.Id))">Edit</DropdownItem>
+                        <DropdownItem Type="ButtonType.Button" Disabled="@checkRole("delete-payment")" @onclick="@(e => DeletePayment(context.Id))">Delete</DropdownItem>
+                        <DropdownItem Type="ButtonType.Button" Disabled="@checkRole("print-payment")" @onclick="@(e => NavigateToPrintPayment(context.Id))">Print Payment</DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
+            </GridColumn>
+
+        </Grid>
+    </CardBody>
+    <CardFooter>
+        <button class="btn btn-primary" @onclick="ExportToExcel">Export to Excel</button>
+    </CardFooter>
+</Card>
+
+
+@code {
+        [Parameter]
+        public int registerId { get; set; }
+
+
+    Grid<PaymentDto> grid;
+    private bool isDataFetched = false;
+    private IEnumerable<PaymentDto> payments = default!;
+    private IEnumerable<PaymentDto> filteredPayments = default!;
+    List<Payment> paymentList = new List<Payment>();
+    public User user_sesstion = new User();
+    private ConfirmDialog dialog = default!;
+    List<ToastMessage> messages = new List<ToastMessage>();
+    private void ShowMessage(ToastType toastType, string title, string msg) {
+        messages.Add(CreateToastMessage(toastType, title, msg));
+        StateHasChanged();
+    }
+
+    bool checkRole(string roleName)
+    {
+        if (user_sesstion?.Roles?.Any(role => role.Functions.Any(rf => rf.FunctionName == roleName)) ?? false)
+            return false;
+        return true;
+    }
+
+    private ToastMessage CreateToastMessage(ToastType toastType, string title, string msg)
+    => new ToastMessage
+        {
+            Type = toastType,
+            Title = title,
+            Message = msg,
+        };
+
+    async Task DeletePayment(int paymentId)
+    {
+        Payment payment = await PaymentService.GetPaymentById(paymentId);
+        bool success = false;
+        var confirmation = await dialog.ShowAsync(
+           title: $"Are you sure you want to delete the payment?",
+           message1: "This will delete the payment. Once deleted can not be rolled back.",
+           message2: "Do you want to proceed?");
+        try
+        {
+            if (confirmation)
+            {
+                if (payment != null)
+                {
+                    success = await PaymentService.DeletPayment(payment);                   
+
+                    if (success)
+                    {
+                        ShowMessage(ToastType.Success, "delete succeeded", "The payment has been deleted successfully.");
+                        paymentList.RemoveAll(x => x.Id == payment.Id);
+                        await FetchPaymentData();
+                        await grid.RefreshDataAsync();
+                        StateHasChanged();
+                    }
+                }
+            }
+        }
+        catch
+        {
+            ShowMessage(ToastType.Danger, "Deleting Error", "Unable to delete the payment as it is associated with other entries.");
+
+        }
+
+    }
+
+    void NavigateToEdit(int paymentId)
+    {
+        NavigationManager.NavigateTo($"/payment/edit/{paymentId}");
+    }
+    void NavigateToDetail(int paymentId)
+    {
+        NavigationManager.NavigateTo($"/payment/detail/{paymentId}");
+    }
+    void NavigateToPrintPayment(int paymentId)
+    {
+        NavigationManager.NavigateTo($"/payment/print/{paymentId}");
+    }
+
+    private async Task<GridDataProviderResult<PaymentDto>> PaymentDataProvider(GridDataProviderRequest<PaymentDto> request)
+    {
+        if (!isDataFetched)
+        {
+            await FetchPaymentData();
+        }
+
+        var result = request.ApplyTo(payments);
+        filteredPayments = result.Data; // Store the filtered data
+        return result;
+
+       // return request.ApplyTo(payments);
+    }
+    private async Task FetchPaymentData()
+    {
+        int userId = 0;
+        var result_UserId = await ProtectedSessionStore.GetAsync<int>("UserId");
+        if (result_UserId.Success)
+        {
+            userId = result_UserId.Value;
+        }
+
+        if (userId > 0)
+        {
+            user_sesstion = await Task.Run(() => UserService.GetUserById(userId));
+            paymentList = await PaymentService.GetPayment();
+            payments = paymentList.Select(payment => new PaymentDto
+                {
+                    Id = payment.Id,
+                    StudentCode = payment.Register?.Student?.StudentCode,
+                    StudentName = payment.Register?.Student?.StudentName,
+                    ClassName = payment.Register?.Student?.ClassRoom?.ClassName,
+                    FeeMethodName = payment.Register?.FeeMethod?.FeeMethodName,
+                    StartDate = DateOnly.FromDateTime(payment.Register.StartDate),
+                    EndDate = DateOnly.FromDateTime(payment.Register.EndDate),
+                    AddedIn = payment.AddedIn,
+                    FullName = payment.User.FullName,
+                    Amount = payment.Amount,
+                    PaymentMethodName = payment.PaymentMethod.PaymentMethodName,
+                    TotalFees = (payment.Register.SubscriptionFee + payment.Register.CostumesFee + payment.Register.BooksFee + payment.Register.BusFee + payment.Register.RegistrationFee - payment.Register.Discount),
+                }).ToList();
+            //payments = paymentList.AsEnumerable();
+            isDataFetched = true;
+            StateHasChanged(); // Trigger a re-render
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+
+    }
+
+    private async Task ExportToExcel()
+    {
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+        using var package = new ExcelPackage();
+        var worksheet = package.Workbook.Worksheets.Add("Payments");
+
+        // Add headers
+        worksheet.Cells[1, 1].Value = "Student Code";
+        worksheet.Cells[1, 2].Value = "Student Name";
+        worksheet.Cells[1, 3].Value = "Classroom";
+        worksheet.Cells[1, 4].Value = "Subscription";
+        worksheet.Cells[1, 5].Value = "Start Date";
+        worksheet.Cells[1, 6].Value = "End Date";
+        worksheet.Cells[1, 7].Value = "Payment Amount";
+        worksheet.Cells[1, 8].Value = "Payment Method";
+        worksheet.Cells[1, 9].Value = "Payment Date";
+        worksheet.Cells[1, 10].Value = "Employee Name";
+
+        // Add filtered data
+        int row = 2;
+        foreach (var payment in filteredPayments)
+        {
+            worksheet.Cells[row, 1].Value = payment.StudentCode;
+            worksheet.Cells[row, 2].Value = payment.StudentName;
+            worksheet.Cells[row, 3].Value = payment.ClassName;
+            worksheet.Cells[row, 4].Value = payment.FeeMethodName;
+            worksheet.Cells[row, 5].Value = payment.StartDate;
+            worksheet.Cells[row, 6].Value = payment.EndDate;            
+            worksheet.Cells[row, 7].Value = payment.Amount;
+            worksheet.Cells[row, 8].Value = payment.PaymentMethodName;
+            worksheet.Cells[row, 9].Value = payment.AddedIn.ToString();
+            worksheet.Cells[row, 10].Value = payment.FullName;
+            row++;
+        }
+
+        // Convert the package to a byte array
+        var fileBytes = package.GetAsByteArray();
+
+        // Trigger the download in the browser
+        var fileName = $"Payments_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+        await JSRuntime.InvokeVoidAsync("saveAsFile", fileName, Convert.ToBase64String(fileBytes));
+    }
+
+
+
+}

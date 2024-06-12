@@ -1,0 +1,179 @@
+﻿@page "/student/edit/{id:int}"
+@inject IStudentService StudentService
+@inject IClassRoomService ClassRoomService
+@inject NavigationManager NavigationManager
+@inject ProtectedSessionStorage ProtectedSessionStore
+﻿@using System.ComponentModel.DataAnnotations
+
+<style>
+    .row {
+        margin-top: 10px !important;
+    }
+</style>
+
+<Card Style="width:100%;margin-bottom:50px;">
+    <CardHeader Color="CardColor.Light">
+        <div class="row">
+            <div class="col-lg-9">
+                <h2>Edit Student</h2>
+            </div>
+            <div class="col-lg-3 text-right">                
+                <a style="border:none;background-color:transparent;" href="/student" role="button">
+                    <Icon Name="IconName.TextIndentRight" Size="IconSize.x2" Color="IconColor.Primary" /></a>
+
+            </div>
+        </div>
+        
+    </CardHeader>
+    <CardBody>
+        <EditForm Model="@studentObj" OnValidSubmit="CreateStudent">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="StudentName" class="control-label"> Student Code</label>
+                        <input name="StudentName" class="form-control" @bind="@studentObj.StudentCode" required disabled />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="StudentName" class="control-label"> Student Name</label>
+                        <input name="StudentName" class="form-control" @bind="@studentObj.StudentName" required />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="Classroom" class="control-label"> Classroom Name</label>
+                        <InputSelect @bind-Value="studentObj.ClassRoomId" class="form-control">
+                            @if (classroomList != null)
+                            {
+                                @foreach (var classroom in classroomList)
+                                {
+                                    <option value="@classroom.Id">@classroom.ClassName</option>
+                                }
+                            }
+                        </InputSelect>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="IsActive" class="control-label"> Enrolled</label>
+                        <input type="checkbox" name="IsActive" @bind="@studentObj.IsActive" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="GuardianPrimaryName" class="control-label"> Guardian Name(1)</label>
+                        <input name="GuardianPrimaryName" class="form-control" @bind="@studentObj.GuardianPrimaryName" required />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="GuardianPrimaryTel" class="control-label"> Guardian Tel(1)</label>
+                        <input name="GuardianPrimaryTel" class="form-control" @bind="@studentObj.GuardianPrimaryTel" required />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="GuardianPrimaryAddress" class="control-label"> Guardian Address(1)</label>
+                        <input name="GuardianPrimaryAddress" class="form-control" @bind="@studentObj.GuardianPrimaryAddress" required />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="GuardianSecName" class="control-label"> Guardian Name(2)</label>
+                        <input name="GuardianSecName" class="form-control" @bind="@studentObj.GuardianSecName" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="GuardianSecTel" class="control-label"> Guardian Tel(2)</label>
+                        <input name="GuardianSecTel" class="form-control" @bind="@studentObj.GuardianSecTel" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="GuardianSecAddress" class="control-label"> Guardian Address(2)</label>
+                        <input name="GuardianSecAddress" class="form-control" @bind="@studentObj.GuardianSecAddress" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="Allergies" class="control-label"> Allergies</label>
+                        <input name="Allergies" class="form-control" @bind="@studentObj.Allergies" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="MdeicalConditions" class="control-label"> Medeical Conditions</label>
+                        <input name="MdeicalConditions" class="form-control" @bind="@studentObj.MdeicalConditions" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="margin-top:20px;">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Save" />
+                        <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+                    </div>
+                </div>
+            </div>
+
+        </EditForm>
+    </CardBody>
+</Card>
+
+
+
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    Student studentObj = new Student();
+    List<ClassRoom> classroomList = new List<ClassRoom>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        classroomList = await Task.Run(() => ClassRoomService.GetClassRooms());
+        studentObj = await Task.Run(() => StudentService.GetStudentById(Convert.ToInt32(id)));
+    }
+
+   
+
+    protected async void CreateStudent()
+    {
+       // studentObj.AddedIn = DateTime.Now;
+       // studentObj.UserId = (await ProtectedSessionStore.GetAsync<int>("UserId")).Value;
+        await StudentService.UpdateStudent(studentObj);
+        NavigationManager.NavigateTo("student");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("student");
+    }
+}

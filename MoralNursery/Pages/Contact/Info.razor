@@ -1,0 +1,114 @@
+﻿@page "/info"
+@inject IContactService ContactService
+@inject NavigationManager NavigationManager
+@inject ProtectedSessionStorage ProtectedSessionStore
+@inject IUserService UserService
+<style>
+    .row {
+        margin-top: 10px !important;
+    }
+</style>
+
+<Toasts class="p-3" Messages="messages" AutoHide="true" Delay="5000" Placement="ToastsPlacement.TopRight" />
+<Card Style="width:100%;margin-bottom:50px;">
+    <CardHeader Color="CardColor.Light">
+        <h2>Nurcery Info</h2>
+        
+    </CardHeader>
+    <CardBody>
+        <EditForm Model="@contactObj" OnValidSubmit="UpdateContact">
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="Classroom" class="control-label"> Nuresery Name</label>
+                        <input for="Classroom" class="form-control" @bind="@contactObj.NurseryName" readonly="@checkRole("update-info")" />
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="Classroom" class="control-label"> Phone number</label>
+                        <input for="Classroom" class="form-control" @bind="@contactObj.NurseryTel" readonly="@checkRole("update-info")" />
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="Classroom" class="control-label"> Address</label>
+                        <input for="Classroom" class="form-control" @bind="@contactObj.NurseryAddress" readonly="@checkRole("update-info")" />
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="Classroom" class="control-label"> Vat number</label>
+                        <input for="Classroom" class="form-control" @bind="@contactObj.NurseryVat" readonly="@checkRole("update-info")" />
+
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top:20px;">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Save" disabled="@checkRole("update-info")" />
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+    </CardBody>
+</Card>
+
+
+
+
+@code {
+    MoralNursery.Data.Models.Contact contactObj = new MoralNursery.Data.Models.Contact();
+    public User user_sesstion = new User();
+    protected override async Task OnInitializedAsync()
+    {
+        int userId = 0;
+        contactObj = await Task.Run(() => ContactService.GetContact());
+        var result_UserId = await ProtectedSessionStore.GetAsync<int>("UserId");
+        if (result_UserId.Success)
+        {
+            userId = result_UserId.Value;
+        }
+        if (userId > 0)
+        {
+            user_sesstion = await Task.Run(() => UserService.GetUserById(userId));
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+    }
+    protected async Task UpdateContact()
+    {
+        await ContactService.UpdateContact(contactObj);
+        ShowMessage(ToastType.Success, "Updating Message", "The information was successfully updated.");
+        
+    }
+    bool checkRole(string roleName)
+    {
+        if (user_sesstion?.Roles?.Any(role => role.Functions.Any(rf => rf.FunctionName == roleName)) ?? false)
+            return false;
+        return true;
+    }
+    List<ToastMessage> messages = new List<ToastMessage>();
+    private void ShowMessage(ToastType toastType, string title, string msg) => messages.Add(CreateToastMessage(toastType, title, msg));
+    private ToastMessage CreateToastMessage(ToastType toastType, string title, string msg)
+       => new ToastMessage
+       {
+           Type = toastType,
+           Title = title,
+           Message = msg,
+       };
+   
+}

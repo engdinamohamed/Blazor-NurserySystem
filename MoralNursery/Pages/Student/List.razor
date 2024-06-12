@@ -1,0 +1,295 @@
+﻿@page "/student"
+@page "/student/list/{classRoomId:int}"
+
+@inject IStudentService StudentService
+@inject IClassRoomService ClassRoomService
+@inject IJSRuntime JSRuntime
+@inject ProtectedSessionStorage ProtectedSessionStore
+@inject NavigationManager NavigationManager
+@inject IUserService UserService
+<Toasts class="p-3" Messages="messages" AutoHide="true" Delay="2000" Placement="ToastsPlacement.TopRight" />
+<ConfirmDialog @ref="dialog" />
+<Card Style="width:100%;margin-bottom:50px;">
+    <CardHeader Color="CardColor.Light">
+
+        @if (classRoomId != 0 && currentClassRoom != null)
+            {
+            
+            <div class="row">
+                <div class="col-lg-9">
+                    <h2>
+                        Students in classroom :
+                        @currentClassRoom.ClassName
+                    </h2>
+                </div>
+                <div class="col-lg-3 text-right">
+                    <a style="border:none;background-color:transparent;" href="/classroom" role="button">
+                        <Icon Name="IconName.TextIndentRight" Size="IconSize.x2" Color="IconColor.Primary" />
+                    </a>
+
+                </div>
+            </div>
+            <button style="border:none;background-color:transparent;" @onclick="NavigateToCreateInClassroom" disabled="@checkRole("add-student")"><Icon Name="IconName.PlusCircleFill" Size="IconSize.x2" Color="IconColor.Success" /></button>
+        }
+        else
+        {
+            <h2>students</h2>
+            <button style="border:none;background-color:transparent;" @onclick="NavigateToCreate" disabled="@checkRole("add-student")"><Icon Name="IconName.PlusCircleFill" Size="IconSize.x2" Color="IconColor.Success" /></button>
+        }
+
+
+        
+    </CardHeader>
+    <CardBody>
+        <Grid @ref="grid" TItem="StudentDto"
+              Class="table table-hover table-bordered table-striped"
+              DataProvider="StudentDataProvider"
+              AllowFiltering="true"
+              AllowPaging="true"
+              PageSize="20"
+              AllowSorting="true"
+              AllowSelection="false"
+              SelectionMode="GridSelectionMode.Multiple"
+              Responsive="true" style="font-size:14px;">
+
+            <GridColumn FilterTextboxWidth="80" TItem="StudentDto" HeaderText="Code" PropertyName="StudentCode" SortKeySelector="item => item.StudentCode">
+                @context.StudentCode
+            </GridColumn>
+            <GridColumn FilterTextboxWidth="150" TItem="StudentDto" HeaderText="Student Name" PropertyName="StudentName" SortKeySelector="item => item.StudentName">
+                @context.StudentName
+            </GridColumn>
+            <GridColumn FilterTextboxWidth="100" TItem="StudentDto" HeaderText="Classroom" PropertyName="ClassName" SortKeySelector="item => item.ClassName">
+                @context.ClassName
+            </GridColumn>
+            <GridColumn FilterTextboxWidth="150" TItem="StudentDto" HeaderText="Guardian Name" PropertyName="GuardianPrimaryName" SortKeySelector="item => item.GuardianPrimaryName">
+                @context.GuardianPrimaryName
+            </GridColumn>
+            <GridColumn FilterTextboxWidth="100" TItem="StudentDto" HeaderText="Tel" PropertyName="GuardianPrimaryTel" SortKeySelector="item => item.GuardianPrimaryTel">
+                @context.GuardianPrimaryTel
+            </GridColumn>
+            <GridColumn FilterTextboxWidth="150" TItem="StudentDto" HeaderText="Address" PropertyName="GuardianPrimaryAddress" SortKeySelector="item => item.GuardianPrimaryAddress">
+                @context.GuardianPrimaryAddress
+            </GridColumn>
+            <GridColumn FilterTextboxWidth="150" TItem="StudentDto" HeaderText="Enrolled" PropertyName="IsActive" SortKeySelector="item => item.IsActive">
+                @(context.IsActive ? "Yes" : "No")
+            </GridColumn>
+            <GridColumn TItem="StudentDto" Filterable="false" Sortable="false">
+                <Dropdown>
+                    <DropdownToggleButton Color="ButtonColor.Secondary">
+                        <Icon Name="IconName.GearFill" Class="menuIcons"></Icon>
+                    </DropdownToggleButton>
+                    <DropdownMenu>
+                        <DropdownItem Type="ButtonType.Button" @onclick="@(e => NavigateToDetail(context.Id))">Details</DropdownItem>
+                        <DropdownItem Type="ButtonType.Button" Disabled="@checkRole("edit-student")" @onclick="@(e => NavigateToEdit(context.Id))">Edit</DropdownItem>
+                        <DropdownItem Type="ButtonType.Button" Disabled="@checkRole("delete-student")" @onclick="@(e => DeleteStudent(context.Id))">Delete</DropdownItem>
+                        <DropdownItem Type="ButtonType.Button" Disabled="@checkRole("add-register")" @onclick="@(e => NavigateToCreateRegister(context.Id))">Add Register</DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
+            </GridColumn>
+
+        </Grid>
+    </CardBody>
+    <CardFooter>
+        <button class="btn btn-primary" @onclick="ExportToExcel">Export to Excel</button>
+    </CardFooter>
+</Card>
+
+
+@code {
+    [Parameter]
+    public int classRoomId { get; set; }
+
+    Grid<StudentDto> grid;
+    private IEnumerable<StudentDto> students = default!;
+    private IEnumerable<StudentDto> filteredStudents = default!;
+    private bool isDataFetched = false;
+    ClassRoom currentClassRoom = new ClassRoom();
+    public User user_sesstion = new User();
+    List<Student> studentList = new List<Student>();
+    private ConfirmDialog dialog = default!;
+    List<ToastMessage> messages = new List<ToastMessage>();
+    private void ShowMessage(ToastType toastType, string title, string msg) => messages.Add(CreateToastMessage(toastType, title, msg));
+
+    private ToastMessage CreateToastMessage(ToastType toastType, string title, string msg)
+    => new ToastMessage
+        {
+            Type = toastType,
+            Title = title,
+            Message = msg,
+        };
+
+
+    bool checkRole(string roleName)
+    {
+        if (user_sesstion?.Roles?.Any(role => role.Functions.Any(rf => rf.FunctionName == roleName)) ?? false)
+            return false;
+        return true;
+    }
+
+    async Task DeleteStudent(int studentId)
+    {
+
+        Student student = await StudentService.GetStudentById(studentId);
+        bool success = false;
+        var confirmation = await dialog.ShowAsync(
+            title: $"Are you sure you want to delete ({student.StudentName})?",
+            message1: "This will delete the student. Once deleted can not be rolled back.",
+            message2: "Do you want to proceed?");
+
+        if (confirmation)
+        {
+            try
+            {
+                if (student != null)
+                {
+                    success = await StudentService.DeleteStudent(student);
+                    if (success)
+                    {
+                        ShowMessage(ToastType.Success, "delete succeeded", "The student has been deleted successfully.");
+                        studentList.RemoveAll(x => x.Id == student.Id);
+                        await FetchStudentData();
+                        await grid.RefreshDataAsync();
+                        StateHasChanged();
+                    }
+                   
+
+                }
+            }
+
+            catch
+            {
+                ShowMessage(ToastType.Danger, "Deleting Error", "Unable to delete the student as it is associated with other entries.");
+            }
+        }
+
+
+
+
+    }
+
+    void NavigateToCreate()
+    {
+        if (!checkRole("add-student"))
+        {
+            NavigationManager.NavigateTo("/student/create");
+        }
+    }
+    void NavigateToCreateInClassroom()
+    {
+        if (!checkRole("add-student"))
+        {
+            NavigationManager.NavigateTo($"/student/create/{classRoomId}");
+        }
+    }
+    void NavigateToEdit(int studentId)
+    {
+        NavigationManager.NavigateTo($"/student/edit/{studentId}");
+    }
+    void NavigateToDetail(int studentId)
+    {
+        NavigationManager.NavigateTo($"/student/detail/{studentId}");
+    }
+    void NavigateToCreateRegister(int studentId)
+    {
+        NavigationManager.NavigateTo($"/register/create/{studentId}");
+    }
+
+    private async Task<GridDataProviderResult<StudentDto>> StudentDataProvider(GridDataProviderRequest<StudentDto> request)
+    {
+        if (!isDataFetched)
+        {
+            await FetchStudentData();
+        }
+        var result = request.ApplyTo(students);
+        filteredStudents = result.Data; // Store the filtered data
+        return result;
+
+
+    }
+    private async Task FetchStudentData()
+    {
+        int userId = 0;
+        var result_UserId = await ProtectedSessionStore.GetAsync<int>("UserId");
+        if (result_UserId.Success)
+        {
+            userId = result_UserId.Value;
+        }
+
+        if (userId > 0)
+        {
+            user_sesstion = await Task.Run(() => UserService.GetUserById(userId));
+
+            // Fetch student data
+            //studentList = await StudentService.GetStudents();
+            if(classRoomId!=null && classRoomId>0)
+            {
+                currentClassRoom = await  ClassRoomService.GetClassRoomById(classRoomId);
+                studentList = await  StudentService.GetStudenstByClassroomId(classRoomId);
+            }
+            else
+            {
+                studentList = await  StudentService.GetStudents();
+
+            }
+            students = studentList.Select(student => new StudentDto
+                {
+                    Id = student.Id,
+                    StudentCode = student.StudentCode,
+                    StudentName = student.StudentName,
+                    ClassName = student.ClassRoom?.ClassName,
+                    GuardianPrimaryName = student.GuardianPrimaryName,
+                    GuardianPrimaryTel = student.GuardianPrimaryTel,
+                    GuardianPrimaryAddress = student.GuardianPrimaryAddress,
+                    IsActive = student.IsActive,
+        }).ToList();
+            isDataFetched = true;
+
+            StateHasChanged(); // Trigger a re-render
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+
+
+
+
+    }
+
+    private async Task ExportToExcel()
+    {
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+        using var package = new ExcelPackage();
+        var worksheet = package.Workbook.Worksheets.Add("Students");
+       
+        // Add headers
+        worksheet.Cells[1, 1].Value = "Student Code";
+        worksheet.Cells[1, 2].Value = "Student Name";
+        worksheet.Cells[1, 3].Value = "Classroom";
+        worksheet.Cells[1, 4].Value = "Guardian Name";
+        worksheet.Cells[1, 5].Value = "Tel";
+        worksheet.Cells[1, 6].Value = "Address";
+        worksheet.Cells[1, 7].Value = "Enrolled";       
+
+        // Add filtered data
+        int row = 2;
+        foreach (var student in filteredStudents)
+        {
+            worksheet.Cells[row, 1].Value = student.StudentCode;
+            worksheet.Cells[row, 2].Value = student.StudentName;
+            worksheet.Cells[row, 3].Value = student.ClassName;
+            worksheet.Cells[row, 4].Value = student.GuardianPrimaryName;
+            worksheet.Cells[row, 5].Value = student.GuardianPrimaryTel;
+            worksheet.Cells[row, 6].Value = student.GuardianPrimaryAddress;
+            worksheet.Cells[row, 7].Value = student.IsActive ? "Yes" : "No";           
+            row++;
+        }
+
+        // Convert the package to a byte array
+        var fileBytes = package.GetAsByteArray();
+
+        // Trigger the download in the browser
+        var fileName = $"Students_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+        await JSRuntime.InvokeVoidAsync("saveAsFile", fileName, Convert.ToBase64String(fileBytes));
+    }
+}

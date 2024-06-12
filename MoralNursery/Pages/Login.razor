@@ -1,0 +1,150 @@
+﻿@page "/"
+@page "/login"
+@layout LoginLayout
+@inject NavigationManager NavigationManager
+@inject IUserService UserService
+@inject ProtectedSessionStorage ProtectedSessionStore
+
+<section class="bg-light p-3 p-md-4 p-xl-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-xxl-11">
+        <div class="card border-light-subtle shadow-sm">
+          <div class="row g-0">
+            <div class="col-12 col-md-6">
+              <img class="img-fluid rounded-start w-100 h-100 object-fit-cover" loading="lazy" src="./images//bg-02.jpg" alt="Moral Nursery">
+            </div>
+            <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
+              <div class="col-12 col-lg-11 col-xl-10">
+                <div class="card-body p-3 p-md-4 p-xl-5">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="mb-5">
+                        <div class="text-center mb-4">
+                          <a href="#!">
+                            <img src="./images//logo-print.png" alt="Logo" width="175" height="57">
+                          </a>
+                        </div>
+                        @* <h4 class="text-center">Login to Moral Nursery</h4> *@
+                      </div>
+                    </div>
+                  </div>                
+                   
+                  </div>
+                  <EditForm Model="@userObj" OnValidSubmit="CheckEmployee">
+                    <div class="row gy-3 overflow-hidden">
+                      <div class="col-12">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" name="username" id="username" @bind="@userObj.Username" placeholder="Username" required>
+                          <label for="username" class="form-label">Username</label>
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="form-floating mb-3">
+                          <input type="password" class="form-control" name="password" id="password" @bind="@userObj.PasswordHash" placeholder="Password" required>
+                          <label for="password" class="form-label">Password</label>
+                        </div>
+                      </div>
+                     
+                      <div class="col-12">
+                        <div class="d-grid">
+                        <button class="btn btn-dark btn-lg" type="submit" disabled="@IsLoading">Log in</button>
+                        </div>
+                      </div>
+
+					<div class="col-12">
+						<div class="form-check" style="height:50px;">
+						@if (IsLoading)
+						{
+							<div>
+								<span style="color:dodgerblue;">
+									Checking
+									<Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Primary" Visible="@IsLoading" />
+								</span>
+							</div>
+						}
+						@if (showError)
+						{
+							<p style="color:red;">@errorMsg</p>
+						}
+						</div>
+					</div>
+
+					
+
+                    </div>
+                    </EditForm>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+</section>
+
+
+
+@code {
+	bool showError = false;
+	bool IsLoading = false;
+	string UserName { get; set; }
+	string Password { get; set; }
+	string errorMsg = "";
+	MoralNursery.Data.Models.User userObj = new MoralNursery.Data.Models.User();
+	async Task CheckEmployee()
+	{
+		showError = false;
+		try
+		{
+			IsLoading = true;
+
+			var user = await Task.Run(() => UserService.CheckUser(userObj.Username, userObj.PasswordHash));
+			IsLoading = false;
+			showError = false;
+			await Task.CompletedTask;
+			if (user != null)
+			{
+				if (user.IsActive == null || user.IsActive == false)
+				{
+					errorMsg = "The user account is currently inactive.";
+					showError = true;
+					UserName = "";
+					Password = "";
+				}
+				else
+				{
+					showError = false;
+					await ProtectedSessionStore.SetAsync("UserName", user.Username);
+					await ProtectedSessionStore.SetAsync("UserId", user.Id);
+					NavigationManager.NavigateTo("/home/index");
+				}
+
+
+			}
+			else
+			{
+				errorMsg = "Invalid Username or password.";
+				showError = true;
+				UserName = "";
+				Password = "";
+			}
+		}
+		catch
+		{
+			errorMsg = "An error occurred while processing your request.";
+			showError = true;
+
+		}
+		finally
+		{
+			IsLoading = false;
+		}
+
+		
+		
+    }
+
+}

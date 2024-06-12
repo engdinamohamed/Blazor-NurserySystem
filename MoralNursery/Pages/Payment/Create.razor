@@ -1,0 +1,261 @@
+﻿@page "/payment/create/{registerId:int}"
+@inject IRegisterService RegisterService
+@inject IFeeMethodService FeeMethodService
+@inject IStudentService StudentService
+@inject IPaymentService PaymentService
+@inject IPaymentMethodService PaymentMethodService
+@inject NavigationManager NavigationManager
+@inject ProtectedSessionStorage ProtectedSessionStore
+@using System.ComponentModel.DataAnnotations
+
+<style>
+    .row {
+        margin-top: 10px !important;
+    }
+    .card{
+        padding:10px;
+    }
+        </style>
+
+
+<Card Style="width:100%;margin-bottom:50px;">
+    <CardHeader Color="CardColor.Light">
+        <div class="row">
+            <div class="col-lg-9">
+            <h2>New payment</h2>
+            </div>
+            <div class="col-lg-3 text-right">                
+                <a style="border:none;background-color:transparent;" href="/payment" role="button">
+                    <Icon Name="IconName.TextIndentRight" Size="IconSize.x2" Color="IconColor.Primary" />
+                </a>
+
+            </div>
+        </div>
+        
+    </CardHeader>
+    <CardBody>
+        <EditForm Model="paymentObj" OnValidSubmit="SavePayment">
+            <div class="card">
+                <div class="card-header">
+                    @if (registerObj != null)
+                    {
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label for="StudentCode" class="control-label"> Student Code: </label>
+                                    <label name="StudentCode" class="control-label"> @registerObj.Student?.StudentCode </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label for="StudentName" class="control-label"> Student Name: </label>
+                                    <label name="StudentName" class="control-label"> @registerObj.Student?.StudentName </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label for="StudentName" class="control-label"> Classroom Name: </label>
+                                    <label name="StudentName" class="control-label"> @registerObj.Student?.ClassRoom.ClassName </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label for="FeeMethod" class="control-label"> Fee Method: </label>
+                                    <label name="FeeMethod" class="control-label"> @registerObj.FeeMethod?.FeeMethodName </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label for="startdate" class="control-label"> Start Date: </label>
+                                    <label name="startdate" class="control-label"> @registerObj.StartDate.ToShortDateString() </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label for="enddate" class="control-label"> End Date: </label>
+                                    <label name="enddate" class="control-label"> @registerObj.EndDate.ToShortDateString() </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label for="fee" class="control-label">Total Fee Required After Discount: </label>
+                                    <label name="fee" class="control-label"> @totalFeesAmount </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label for="payedamout" class="control-label"> Total Payed Amount: </label>
+                                    <label name="payedamout" class="control-label"> @totalPayedAmount </label>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="Classroom" class="control-label"> Payment Method</label>
+                                <InputSelect class="form-control"
+                                             @bind-Value="@paymentObj.PaymentMethodId">
+                                    @if (paymentMethodList != null)
+                                    {
+                                        @foreach (var paymentMethod in paymentMethodList)
+                                        {
+                                            <option value="@paymentMethod.Id">@paymentMethod.PaymentMethodName</option>
+                                        }
+                                    }
+                                </InputSelect>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="Discount" class="control-label"> Payment</label>
+                                <input name="Discount" class="form-control" value="@paymentObj.Amount" @onchange="OnChangePaymentAmount" required />
+                                @if (notValidFeeAnount)
+                                {
+                                    @* <p class="text-danger">Payment amount must be between 0 and the remaining fee.</p> *@
+                                    <Alert Color="AlertColor.Danger" Dismissable="false">
+                                        <Icon Name="IconName.ExclamationTriangleFill" class="me-2">
+
+                                        </Icon>"Payment amount must be between 1 and the remaining fee."
+                                    </Alert>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="Feerequired" class="control-label"> Remaining Amount </label>
+                                <input name="Feerequired" class="form-control" @bind="@remaingAmount" readonly required />
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row" style="margin-top:20px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <button type="submit" name="action" value="save" class="btn btn-primary">Save</button>
+
+                                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </EditForm>
+    </CardBody>
+</Card>
+
+
+@code {
+    [Parameter]
+    public int registerId { get; set; }
+
+    Register registerObj = new Register();
+    Payment paymentObj = new Payment();
+    Student studentObj;
+    int userId = 0;
+    float totalPayedAmount = 0 , remaingAmount=0 ,totalFeesAmount=0;
+    List<PaymentMethod> paymentMethodList = new List<PaymentMethod>();
+    bool notValidFeeAnount=false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        paymentMethodList = await Task.Run(() => PaymentMethodService.GetPaymentMethods());
+        registerObj = await Task.Run(() => RegisterService.GetRegisterById(registerId));
+        studentObj = registerObj.Student;
+        totalPayedAmount = PaymentService.getTotalPayedAmount(registerId);
+        var paymentMethod = paymentMethodList.FirstOrDefault();
+        if (paymentMethod != null)
+        {
+            paymentObj.PaymentMethodId = paymentMethod.Id;           
+
+        }
+        totalFeesAmount = registerObj.SubscriptionFee + registerObj.CostumesFee +
+        registerObj.BusFee + registerObj.BooksFee + registerObj.RegistrationFee - registerObj.Discount ;
+        remaingAmount = (totalFeesAmount - totalPayedAmount);
+
+    } 
+
+    protected async Task HandleValidSubmit(EditContext editContext)
+    {
+        
+           // await SavePayment();
+           // NavigationManager.NavigateTo("payment");
+        
+    }
+    protected async void SavePayment()
+    {
+        if (notValidFeeAnount) return;
+        paymentObj.AddedIn = DateTime.Now;
+        paymentObj.UserId = (await ProtectedSessionStore.GetAsync<int>("UserId")).Value;
+        paymentObj.RegisterId = registerId;
+        //registerObj.StudentId = studentId;
+        await PaymentService.CreatePayment(paymentObj);
+        NavigationManager.NavigateTo("payment");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("payment");
+    }
+
+    private async Task OnChangePaymentAmount(ChangeEventArgs args)
+    {
+        remaingAmount = 0;
+        paymentObj.Amount = 0;
+        if (args.Value != null && !string.IsNullOrWhiteSpace(args.Value.ToString()))
+        {
+            if (float.TryParse(args.Value.ToString(), out float amount))
+            {
+                if (amount <= 0 || amount > (totalFeesAmount - totalPayedAmount))
+                {
+                    notValidFeeAnount = true;
+                }
+                else
+                {
+                    notValidFeeAnount = false;
+                }
+                paymentObj.Amount = amount;
+            }
+            else
+            {
+                notValidFeeAnount = true;
+            }
+
+        }
+        else
+        {
+            notValidFeeAnount = true;
+        }
+       
+       // totalFeesAmount = registerObj.SubscriptionFee + registerObj.CostumesFee +
+      //  registerObj.BusFee + registerObj.BooksFee + registerObj.RegistrationFee;
+        remaingAmount = (totalFeesAmount - totalPayedAmount) - paymentObj.Amount;
+
+
+    }
+   
+}
+
